@@ -179,15 +179,7 @@ $master='kasir' @endphp
                             <label for="exampleInputPassword1">Guna Membayar</label>
                             <input type="text" class="form-control readonly" id="gm" required>
                         </div>
-                        <div class="form-group jt">
-                            <label for="exampleInputPassword1">Jatuh Tempo</label>
-                            <input type="date" class="form-control readonly" id="jt" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="kunci" for="exampleInputPassword1">Kunci</label>
-                            <input type="text" class="form-control kunci" id="kunci">
-                        </div>
-
+    
 
 
                     </div>
@@ -214,7 +206,7 @@ $master='kasir' @endphp
                 <button type="button" class="btn btn-primary ml-2" href="/notabesar" id="resetbutton"><i class="fa fa-back"></i>Kembali</button>
                
                 <button type="button" class="btn btn-warning ml-2" id="printbutton"><i class="fa fa-print mr-2"></i>Print</button>
-                <button type="button" id="suratjalan" data-toggle="modalgi" data-target="#exampleModal" class="btn btn-primary float-right ml-2">Surat Jalan</button>
+                <button type="button" id="suratjalan" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary float-right ml-2">Surat Jalan</button>
             </div>
         </div>
         </form>
@@ -234,14 +226,16 @@ $master='kasir' @endphp
         </button>
       </div>
       <div class="modal-body">
+        <form action="" id="sjsubmit">
         <div class="form-group">
-          <label>Keterangan : </label>
-          <textarea class="form-control"></textarea>
+          <label>Jatuh Tempo : </label>
+          <input id="jt" type="date" class="form-control">
         </div>
         <div class="form-group">
-          <label>Keterangan lainnya : </label>
-          <textarea class="form-control"></textarea>
+          <label>Kunci : </label>
+          <input id="kunci" type="text" class="form-control">
         </div>
+        
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>

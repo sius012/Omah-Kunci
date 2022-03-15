@@ -398,22 +398,26 @@ $("#trigger").click(function(e){
         });
     });
 
-    $("#suratjalan").click(function(){
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                 }, 
-            data: {
-                id_transaksi : $("#id_trans").val()
-            },
-            url: "/cetaksjnb",
-            type: "post",
-            success: function(response){
-                printJS({printable: response['filename'], type: 'pdf', base64: true, style: '@page { size: Letter landscape; }'});
-            },error: function(err){
-                Swal.fire('terjadi kesalahan','','info');
-                alert(err.responseText);
-            }
-        });
-    });
+    // $("#suratjalan").click(function(){
+    //     $.ajax({
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //              }, 
+    //         data: {
+    //             id_transaksi : $("#id_trans").val()
+    //         },
+    //         url: "/cetaksjnb",
+    //         type: "post",
+    //         success: function(response){
+    //             printJS({printable: response['filename'], type: 'pdf', base64: true, style: '@page { size: Letter landscape; }'});
+    //         },error: function(err){
+    //             Swal.fire('terjadi kesalahan','','info');
+    //             alert(err.responseText);
+    //         }
+    //     });
+    // });
+
+    $("#sjsubmit").submit(function(e){
+        e.preventDefault();
+    })
 });
