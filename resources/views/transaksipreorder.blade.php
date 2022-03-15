@@ -57,6 +57,31 @@ $master='kasir' @endphp
             }
         });
     });
+
+    $("#sj2").click(function(e){
+        
+        $.ajax({
+            headers: {
+                "X-CSRF-TOKEN" : $("meta[name=csrf-token]").attr('content')
+            },
+            url: "/kirimsj2",
+            type: "post",
+            data: {
+                id_trans : $(this).attr('id_trans'),
+              
+            },
+            success: function(response){
+              
+                 printJS({printable: response['filename'], type: 'pdf', base64: true, style: '@page { size: Letter landscape; }'});
+              
+            },error: function(err){
+                 alert(err.responseText);
+            }
+         });
+    });
+
+
+
       });
     </script>
 @endsection
@@ -199,6 +224,7 @@ $master='kasir' @endphp
             </div>
         </div>
         <div class="modal-footer">
+       @if($info[2]->status == 'ready' or $info[2]->status == 'dibayar') <button class="btn btn-primary" id="sj2" id_trans="{{$info[1]->id_transaksi}}">Surat Jalan</button>@endif
         <button id="printbutton" type="button" id_nb=" @if($info[1]->status == 'dibayar' and @info[2]->status == 'ready') {{$info[1]->id_transaksi}} @elseif( $info[2]->status == 'dibayar') {{$info[2]->id_transaksi}} @else  {{$info[0]->id_transaksi}} @endif" class="btn btn-primary">Cetak</button>
           <button type="button" class="btn btn-secondary btnClose" data-dismiss="modal">Tutup</button>
         </div>

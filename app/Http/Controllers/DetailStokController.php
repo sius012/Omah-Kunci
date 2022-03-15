@@ -13,7 +13,7 @@ use PDF;
 class DetailStokController extends Controller
 {
     public function loaddatadetailstok(){
-        $datab = DB::table('detail_stok')->join('new_produks', 'new_produks.kode_produk','detail_stok.kode_produk')->join('mereks', 'new_produks.id_merek','mereks.id_merek')->join('users','users.id','=','detail_stok.id_ag')->select('detail_stok.*','new_produks.nama_produk','new_produks.satuan','users.name')->get();
+        $datab = DB::table('detail_stok')->join('new_produks', 'new_produks.kode_produk','detail_stok.kode_produk')->join("kode_types","kode_types.id_kodetype","new_produks.id_ct")->join('mereks', 'new_produks.id_merek','mereks.id_merek')->join('users','users.id','=','detail_stok.id_ag')->select('detail_stok.*','new_produks.nama_produk','new_produks.satuan','users.name',"mereks.nama_merek","kode_types.nama_kodetype")->get();
         $data = DB::table('detail_stok')->join('new_produks', 'new_produks.kode_produk','detail_stok.kode_produk')->join('mereks', 'new_produks.id_merek','mereks.id_merek')->join('users','users.id','=','detail_stok.id_ag')->select('detail_stok.*','new_produks.nama_produk','new_produks.satuan','users.name')->get();
 
 
@@ -28,7 +28,7 @@ class DetailStokController extends Controller
             $listjumlah = explode(",",substr($gs->jumlah,0,-1));
             
             foreach($listproduk as $j => $ls){
-                $dato = DB::table("new_produks")->join("mereks","mereks.id_merek","new_produks.id_merek")->where("kode_produk",$ls)->first();
+                $dato = DB::table("new_produks")->join("mereks","mereks.id_merek","new_produks.id_merek")->join("kode_types","kode_types.id_kodetype","new_produks.id_ct")->join("tipes","tipes.id_tipe","new_produks.id_tipe")->where("kode_produk",$ls)->first();
                 $get1[$i]["produk".$j] =  $dato;
 
                 $produkcount++;
@@ -105,14 +105,28 @@ class DetailStokController extends Controller
     public function printstoktrack(Request $req){
        
 
-        $dato = DB::table("detail_stok")->join("new_produks","detail_stok.kode_produk","=","new_produks.kode_produk")->join("mereks","mereks.id_merek","=","new_produks.id_merek")->join("users","users.id","=","detail_stok.id_ag");
-        $dato_trans = DB::table("detail_transaksi")->join("new_produks","detail_transaksi.kode_produk","=","new_produks.kode_produk")->join("mereks","mereks.id_merek","=","new_produks.id_merek")->where("status","!=","return");
+        $dato = DB::table("detail_stok")->join("new_produks","detail_stok.kode_produk","=","new_produks.kode_produk")->join("mereks","mereks.id_merek","=","new_produks.id_merek")
+        ->join("kode_types","kode_types.id_kodetype","=","new_produks.id_ct")
+        ->join("users","users.id","=","detail_stok.id_ag");
+        $dato_trans = DB::table("detail_transaksi")->join("new_produks","detail_transaksi.kode_produk","=","new_produks.kode_produk")->join("mereks","mereks.id_merek","=","new_produks.id_merek")
+        ->join("kode_types","kode_types.id_kodetype","=","new_produks.id_ct")
+        ->where("status","!=","return");
 
-        $keluar1 = DB::table("detail_stok")->join("new_produks","detail_stok.kode_produk","=","new_produks.kode_produk")->where("status","keluar")->join("mereks","mereks.id_merek","=","new_produks.id_merek")->join("users","users.id","=","detail_stok.id_ag");
-        $keluar1trans = DB::table("detail_transaksi")->join("new_produks","detail_transaksi.kode_produk","=","new_produks.kode_produk")->join("mereks","mereks.id_merek","=","new_produks.id_merek")->select('new_produks.nama_produk','new_produks.kode_produk', 'detail_transaksi.*','mereks.nama_merek');
+        $keluar1 = DB::table("detail_stok")->join("new_produks","detail_stok.kode_produk","=","new_produks.kode_produk")
+        ->join("kode_types","kode_types.id_kodetype","=","new_produks.id_ct")
+        ->join("mereks","mereks.id_merek","=","new_produks.id_merek")->join("users","users.id","=","detail_stok.id_ag")->where("status","keluar");
+        $keluar1trans = DB::table("detail_transaksi")->join("new_produks","detail_transaksi.kode_produk","=","new_produks.kode_produk")
+        ->join("kode_types","kode_types.id_kodetype","=","new_produks.id_ct")
+        ->join("mereks","mereks.id_merek","=","new_produks.id_merek")->select('new_produks.nama_produk','new_produks.kode_produk', 'detail_transaksi.*','mereks.nama_merek',"kode_types.nama_kodetype");
 
-        $masuk1 = DB::table("detail_stok")->join("new_produks","detail_stok.kode_produk","=","new_produks.kode_produk")->where("status","masuk")->join("mereks","mereks.id_merek","=","new_produks.id_merek")->join("users","users.id","=","detail_stok.id_ag");
-        $masuk1trans = DB::table("detail_transaksi")->join("transaksi","transaksi.kode_trans","=","detail_transaksi.kode_trans")->join("new_produks","detail_transaksi.kode_produk","=","new_produks.kode_produk")->join("mereks","mereks.id_merek","=","new_produks.id_merek")->where("detail_transaksi.status","return")->where("transaksi.status","=","return")->select('new_produks.nama_produk','new_produks.kode_produk', 'detail_transaksi.*','mereks.nama_merek');;
+        $masuk1 = DB::table("detail_stok")->join("new_produks","detail_stok.kode_produk","=","new_produks.kode_produk")
+        ->join("kode_types","kode_types.id_kodetype","=","new_produks.id_ct")
+        ->where("status","masuk")->join("mereks","mereks.id_merek","=","new_produks.id_merek")->join("users","users.id","=","detail_stok.id_ag");
+        $masuk1trans = DB::table("detail_transaksi")->join("transaksi","transaksi.kode_trans","=","detail_transaksi.kode_trans")->join("new_produks","detail_transaksi.kode_produk","=","new_produks.kode_produk")
+   
+        ->join("mereks","mereks.id_merek","=","new_produks.id_merek")
+        ->join("kode_types","kode_types.id_kodetype","=","new_produks.id_ct")
+        ->where("detail_transaksi.status","return")->where("transaksi.status","=","return")->select('new_produks.nama_produk','new_produks.kode_produk', 'detail_transaksi.*','mereks.nama_merek','kode_types.nama_kodetype');
 
         $retur = [];
 
@@ -190,8 +204,10 @@ class DetailStokController extends Controller
             $listjumlah = explode(",",substr($gs->jumlah,0,-1));
             
             foreach($listproduk as $j => $ls){
-                $dato = DB::table("new_produks")->join("mereks","mereks.id_merek","new_produks.id_merek")->where("kode_produk",$ls)->first();
-                array_push($retur,["tanggal"=>$gs->tanggal,"keterangan"=>$gs->keterangan,"Nama Admin"=>$gs->name,"kode_produk"=>$dato->kode_produk,"nama_produk"=>$dato->nama_produk,"nama_merek"=>$dato->nama_merek,"jumlah"=>$listjumlah[$j],"tanggal"=>$gs->tanggal]);
+                $dato = DB::table("new_produks")->join("mereks","mereks.id_merek","new_produks.id_merek")
+                ->join("kode_types","kode_types.id_kodetype","=","new_produks.id_ct")
+                ->where("kode_produk",$ls)->first();
+                array_push($retur,["tanggal"=>$gs->tanggal,"keterangan"=>$gs->keterangan,"Nama Admin"=>$gs->name,"kode_produk"=>$dato->kode_produk,"nama_produk"=>$dato->nama_produk,"nama_kodetype"=>$dato->nama_kodetype,"nama_merek"=>$dato->nama_merek,"jumlah"=>$listjumlah[$j],"tanggal"=>$gs->tanggal]);
 
 
                
@@ -214,6 +230,7 @@ class DetailStokController extends Controller
             $myArr["suplier"] = $retur;
         }
 
+        $myArr['tanggal'] = $req->berdasarkan == 'tanggal' ? date("d M Y",strtotime($req->tanggal))." - ".date("d-M-Y",strtotime($req->tanggal2)) : "Hari Minggu dan Bulan";
         
         
        

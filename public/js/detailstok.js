@@ -118,7 +118,7 @@ $(document).ready(function () {
                                 <tr>
                                         <td>${rows['created_at']}</td>
                                         <td>${rows['kode_produk']}</td>
-                                        <td>${rows['nama_produk']}</td>
+                                        <td>${rows['nama_kodetype']+" "+rows['nama_merek']+" "+rows['nama_produk']}</td>
                                         <td>${rows['jumlah']} ${rows['satuan']}</td>
                                         <td><div class="status ${rows['status'] != 'masuk' ? "bg-danger" : "bg-success"}">${rows['status']}</div></td>
                                         <td>${rows['keterangan']}</td>
@@ -139,8 +139,7 @@ $(document).ready(function () {
                         <tr>
                         <td>${i + 1}</td>
                         <td>${rows['produk' + i]["kode_produk"]}</td>
-                        <td>${rows['produk' + i]["nama_produk"]}</td>
-                        <td> ${rows['produk' + i]["nama_merek"]}</td>
+                        <td>${rows['produk' + i]["nama_kodetype"]+" "+rows['produk' + i]["nama_merek"]+" " + rows['produk' + i]["nama_produk"]}</td>
                         <td>${rows['jumlah' + i]} ${rows['produk' + i]["satuan"]}</td>
                     </tr`;
                     }
@@ -164,8 +163,7 @@ $(document).ready(function () {
                                     <tr>
                                        <th style="width:10px;">No</th>
                                         <th style="width:100px;">Kode Produk</th>
-                                        <th style="width:180px;">Nama</th>
-                                        <th style="width:180px;">Merek</th>
+                                        <th style="width:180px;">Produk</th>
                                         <th style="width:70px;">Jumlah</th>
                                     </tr>
                                 </thead>

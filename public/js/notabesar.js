@@ -1,5 +1,6 @@
 
 
+
 $(document).ready(function(){
     $("#suratjalan").hide();
     $(".jt").hide();
@@ -51,7 +52,10 @@ var omge = `
 `;
 
 
-
+$(document).on('click','.nnt',function(e){
+    $("#searcher-nota").val($(e.target).text());
+    searchnota($("#searcher-nota").val());
+});
 $("#notabesar").change(function(){
    jenisnota = $(this).val();
    if($(this).val() == "pintugarasi"){
@@ -75,7 +79,7 @@ $("#notabesar").change(function(){
 });
 $(".opsigrup").html(pg);
 $("#trigger").click(function(e){
-    alert(currentopsi);
+   
 })
  
 
@@ -94,130 +98,12 @@ $("#trigger").click(function(e){
 
 
     $("#searcher-nota").keyup(function(e){
-        $.ajax({
-            headers: {
-                "X-CSRF-TOKEN" : $("meta[name=csrf-token]").attr('content')
-            },
-            data: {
-                kw : $("#searcher-nota").val()
-            },
-            url: "/searchnotapreorder",
-            type: "post",
-            dataType: "json",
-            success: function(data){
-                console.log(data);
-                let row = data.map(function(datas){
-                    return `
-                <li><a href="#"  id_nb = ${datas['id_transaksi']} class='${datas['us'] == null && datas['status'] == "menunggu" ? "disab" :  "cc"}'>${datas['no_nota'] + "  " + "Termin: " + datas['termin']}</a></li>
-
-                    `;
-                });
-
-                $("#myUL").html(row);
-            },
-            error: function(err){
-                Swal.fire(err.responseText)
-            }
-
-        });
+        searchnota($("#searcher-nota").val());
     });
 
     $("ul").on("click", "li .cc", function(e){
-        $.ajax({
-            headers: {
-                "X-CSRF-TOKEN" : $("meta[name=csrf-token]").attr('content'),
-            },
-            data: {
-                id_transaksi : $(e.target).attr("id_nb")
-            },
-            url: "/getnb",
-            type: "post",
-            dataType: "json",
-            success: function(data){
-                $(".readonly").attr("readonly","readonly");
-                
-                if(data["nb"][0]["termin"] == 2){
-                    $("#suratjalan").show();
-                    $(".jt").show();
-                }else{
-                $("#suratjalan").hide();
-                }
-                if(data["peringatan"] != undefined){
-                    alert("error");
-                }
 
-                if(data['nb'][0]['termin'] > 1){
-                    $(".kunci").show();
-                    $("#kunci").val(data['nb'][0]['kunci']);
-                 }else{
-                    $(".kunci").hide();
-                }
-                console.log(data);
-                $("#tt").text(data["nb"][0]["termin"] == 3 ? "PELUNASAN" : "Termin: "+data["nb"][0]["termin"]);
-             //   $("#baseinputnb .col").show();
-               // $("#baseinputnb input, label").show();
-                $("#ttd").  val(data['nb'][0]['ttd']);
-                $("#up").   val(data['nb'][0]['up']);
-                $("#us").   val(data['nb'][0]['us']);
-                $("#brp").  val(data['nb'][0]['brp']);
-                $("#gm").   val(data['nb'][0]['gm']);
-                $("#total").val(parseInt(data['nb'][0]['total']).toLocaleString());
-                $("#total2").val(parseInt(data['nb'][0]['total']));
-                $("#nn").text("No Nota: "+data["nb"][0]["no_nota"]);
-                $("#tgl").val(data["nb"][0]["created_at"]);
-                $("#jt").val(data["nb"][0]["jatuh_tempo"]);
-                $("#td2").val(parseInt(data['nb'][0]['total']));
-                $("#termin").val(data['nb'][0]['termin']);
-    
-    
-    
-                let row = data["opsi"].map(function(e,i){
-                    return `
-                    <div class="form-group">
-                        <label>${e['judul']}</label>
-                        <input type="text" class="form-control isi${i+1} readonly" readonly id="exampleInputPassword1" value="${e['ket']}">
-                    </div>
-                    `;
-                    
-                });
-
-                callbacking(data['opsi'].length);
-                $(".opsigrup").html(row);
-
-                $("#buttonsubmit").text("Bayar");
-                $("#preorderform").attr("action", "/bayarpreorder");
-                $("#id_trans").val(data["nb"][0]["id_transaksi"]);
-                $(".td").show();
-                $(".td").children("input").val(parseInt(data["td"]).toLocaleString());
-                $("#addopsi").hide();
-                if(data["nb"][0]["status"] == "dibayar"){
-                    $("#us").attr("disabled", "disabled");
-                    $("#brp").attr("disabled", "disabled");
-                    $("#buttonsubmit").attr("disabled", "disabled");
-                    $("#buttonsubmit").text("Sudah Lunas");
-                    $("#buttonsubmit").removeClass("btn-primary");
-                    $("#buttonsubmit").addClass("btn-success");
-                    $("#printbutton").removeAttr("disabled");
-                    $("#suratjalan").removeAttr("disabled");
-                    $("#kunci").attr("readonly",'readonly');
-                
-                
-                }else{
-                    $("#us").removeAttr("disabled");
-                    $("#brp").removeAttr("disabled");
-                    $("#buttonsubmit").removeAttr("disabled");
-                    $("#buttonsubmit").removeClass("btn-success");
-                    $("#buttonsubmit").addClass("btn-primary");
-                    $("#buttonsubmit").text("Bayar");
-                    $("#printbutton").attr("disabled", "disabled");
-                   
-                }
-            },
-            error: function(err){
-                alert(err.responseText);
-                Swal.fire("error", "", "info");
-            }
-        });
+        tampilkannb($(e.target).attr('id_nb'));
     });
 
 
@@ -309,7 +195,8 @@ $("#trigger").click(function(e){
             
         }
 
-        console.log(formData);
+       // alert(parseInt($("#td2").val()) + parseInt($("#us").val().replace(/[._]/g,'')));
+
         if(parseInt($("#termin").val()) != 3 || parseInt($("#td2").val()) + parseInt($("#us").val().replace(/[._]/g,'')) >= parseInt($("#total2").val())){
         $.ajax({
             headers: {
@@ -329,8 +216,13 @@ $("#trigger").click(function(e){
             url: url,
             dataType: "json",
             success: function(data){
+                if($("#termin").val() == 2){
+                
+                    $("#suratjalan").show();
+                }
+                alert($("#id_trans").val());
                 Swal.fire({
-                    title: url == "/bayarpreorder" ? "Pembayaran dilunasi" : "Transaksi Berhasi Ditambahkan" 
+                    title: url == "/bayarpreorder" ? "Pembayaran selesai" : "Transaksi Berhasi Ditambahkan" 
                 });
              //   $("#preorderform input").val("");
                 $("#preorderform").attr("disabled", "disabled");
@@ -340,12 +232,14 @@ $("#trigger").click(function(e){
                 $("#buttonsubmit").removeClass("btn-primary");
                 $("#buttonsubmit").addClass("btn-success");
                 $("#id_trans").val(data["id_nb"]);
-                $("#nn").text("No Nota: "+data["no_nota"]);
+                $("#nn").html("No Nota: " + "<a class='nnt' href=#>"+data["no_nota"]+"</a>");
                 $("#termin").val(data['termin']);
                 $("#searcher-nota").val("");
                 $("#printbutton").removeAttr('disabled');
                 $("#suratjalan").removeAttr('disabled');
                 $("#us").attr("disabled", "disabled");
+               
+               
                
             
             },
@@ -380,7 +274,6 @@ $("#trigger").click(function(e){
     });
 
     $("#resetbutton").click(function(e){
-        alert( $(this).attr("href"));
         e.preventDefault();
         $.ajax({
             headers: {
@@ -389,11 +282,11 @@ $("#trigger").click(function(e){
             url: '/resettrans',
             type: 'POST',
             success: function(){
-                alert('hai');
+              
                 window.location = $("#resetbutton").attr("href");
             },
             error: function(err){
-                alert('hai');
+         
             },
         });
     });
@@ -419,5 +312,29 @@ $("#trigger").click(function(e){
 
     $("#sjsubmit").submit(function(e){
         e.preventDefault();
-    })
+        $.ajax({
+           headers: {
+               "X-CSRF-TOKEN" : $("meta[name=csrf-token]").attr('content')
+           },
+           url: "/kirimsj",
+           type: "post",
+           data: {
+               id_trans : $("#id_trans").val(),
+               kunci : $("#kunci").val(),
+               jt : $("#jt").val(),
+           },
+           success: function(response){
+             if(response['filename']==null){
+                 Swal.fire("Surat Jalan Berhasil dibuat");
+                 $("#tbsj").text("Cetak")
+             }else{
+                printJS({printable: response['filename'], type: 'pdf', base64: true, style: '@page { size: Letter landscape; }'});
+             }
+           },error: function(err){
+                alert(err.responseText);
+           }
+        });
+    });
+   
+    
 });

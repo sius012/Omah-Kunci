@@ -7,11 +7,36 @@ $master='kasir' @endphp
 
 @section('js')
 <script src="{{ asset('js/print.js') }}"></script>
-<script src="{{ asset('js/transaksi.js') }}"></script>
-<script src="{{ asset('js/notabesar.js') }}"></script>
-@isset($id)
 <script>
-    $(document).ready(function() {
+    function searchnota(kw){
+        $.ajax({
+            headers: {
+                "X-CSRF-TOKEN" : $("meta[name=csrf-token]").attr('content')
+            },
+            data: {
+                kw : kw
+            },
+            url: "/searchnotapreorder",
+            type: "post",
+            dataType: "json",
+            success: function(data){
+                console.log(data);
+                let row = data.map(function(datas){
+                    return `
+                <li><a href="#"  id_nb = ${datas['id_transaksi']} class='${datas['jatuh_tempo'] == null && datas['status']  == "menunggu"  && datas['kunci'] == null ? "disab" :  "cc"}'>${datas['no_nota'] + "  " + "Termin: " + datas['termin']}</a></li>
+
+                    `;
+                });
+
+                $("#myUL").html(row);
+            },
+            error: function(err){
+                Swal.fire(err.responseText)
+            }
+
+        });
+    }
+    function tampilkannb($id_trans){
         $(".readonly").attr("readonly","readonly");
         $("#notabesar").hide();
         $(".kunci").hide();
@@ -22,16 +47,14 @@ $master='kasir' @endphp
                 "X-CSRF-TOKEN": $("meta[name=csrf-token]").attr('content')
             , }
             , data: {
-                id_transaksi: "{{$id}}"
+                id_transaksi: $id_trans
             }
             , url: "/getnb"
             , type: "post"
             , dataType: "json"
             , success: function(data) {
                 $("#baseinputnb input, label").show();
-                if(data["nb"][0]["termin"] == 2){
-                    $("#suratjalan").show();
-                }
+         
 
                 if(data['nb'][0]['termin'] == 2){
                     $(".kunci").show();
@@ -52,10 +75,12 @@ $master='kasir' @endphp
                 $("#brp").val(data['nb'][0]['brp']);
                 $("#gm").val(data['nb'][0]['gm']);
                 $("#total").val(parseInt(data['nb'][0]['total']).toLocaleString());
-                $("#nn").text("No Nota: " + data["nb"][0]["no_nota"]);
-                $("#tgl").val(data["nb"][0]["created_at"]);
+                $("#total2").val(parseInt(data['nb'][0]['total']));
+                $("#nn").html("No Nota: " + "<a class='nnt' href=#>"+data["nb"][0]["no_nota"]+"</a>");
+                $("#tgl").val(data["nb"][0]["tanggalbuat"]);
                 $("#jt").val(data["nb"][0]["jatuh_tempo"]);
                 $("#termin").val(data['nb'][0]['termin']);
+                 $("#jt").attr("disabled",'disabled');
 
                 let row = data["opsi"].map(function(e, i) {
                     return `
@@ -74,7 +99,8 @@ $master='kasir' @endphp
                 $("#preorderform").attr("action", "/bayarpreorder");
                 $("#id_trans").val(data["nb"][0]["id_transaksi"]);
                 $(".td").show();
-                $(".td").children("input").val(parseInt(data["td"]).toLocaleString());
+                $("#td2").val(parseInt(data["td"]));
+                $(".td").children("#td").val(parseInt(data["td"]).toLocaleString());
                 $("#addopsi").hide();
                // $("#suratjalan").attr("disabled","disabled");
                 if (data["nb"][0]["status"] == "dibayar") {
@@ -87,22 +113,53 @@ $master='kasir' @endphp
                     $("#buttonsubmit").addClass("btn-success");
                     $("#printbutton").removeAttr("disabled");
                     $("#suratjalan").removeAttr("disabled");
-                    $("#kunci").attr("readonly",'readonly');
+                   
+                    if(data["nb"][0]["termin"] == 2){
+                        $("#suratjalan").show();
+                    }
+                  
+ 
 
                 } else {
+                    $("#us").removeAttr("disabled");
+                    $("#us").removeAttr("disabled");
                     $("#buttonsubmit").removeAttr("disabled");
                     $("#buttonsubmit").removeClass("btn-success");
                     $("#buttonsubmit").addClass("btn-primary");
                     $("#buttonsubmit").text("Bayar");
                     $("#printbutton").attr("disabled", "disabled");
+                    $("#kunci").removeAttr("readonly");
+                    $("#jt").removeAttr('readonly');
+                    
+                   $("#jt").removeAttr('readonly');
+                }
+
+                if(data['nb'][0]['kunci'] == null){
+                    $("#tbsj").text("Kirim");
+                    $("#jt").removeAttr("disabled");
+                }else{
+                    
+                    $("#tbsj").text("Cetak");
                 }
                 $(".readonly").attr('readonly', 'readonly');
             }
             , error: function(err) {
+                alert(err.responseText);
                 Swal.fire("error", "", "info");
             }
         });
 
+        
+
+    }
+</script>
+<script src="{{ asset('js/transaksi.js') }}"></script>
+<script src="{{ asset('js/notabesar.js') }}"></script>
+@isset($id)
+<script>
+    $(document).ready(function() {
+        var idt = "{{$id}}";
+        tampilkannb(idt);
 
     });
 
@@ -239,8 +296,9 @@ $master='kasir' @endphp
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-        <button type="button" class="btn btn-primary">Simpan</button>
+        <button type="submit" class="btn btn-primary" id="tbsj">Simpan</button>
       </div>
+</form>
     </div>
   </div>
 </div>

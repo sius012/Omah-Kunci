@@ -36,8 +36,10 @@
 
 
     <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    @if(Auth::user()->roles[0]['name'] == 'kasir' or Auth::user()->roles[0]['name'] == 'manager')
     <script>
         $(document).ready(function(){
+            
             $(document).on('click', '.btnlink', function(e){
                 e.preventDefault();
                 window.location = "/prosesbayar/"+$(this).attr('id_nb');
@@ -51,23 +53,33 @@
                     type: "post",
                     dataType: "json",
                     success: function(data){
+                        
                          $(".badger").html(data.length);
                         let row=data.map(function(datas){
                             return `<a href="#" id_nb='${datas['id_transaksi']}' class="dropdown-item p-3 btnlink">
                         <i class="fas fa-info mr-2"></i>No Nota ${datas['no_nota']} sudah mendekati jatuh tempo
                     </a>`;
                         });
-
+                        
                         $(".cont-notif").html(row);
-                        $(".titler").html(row.length + " Notifikasi");
+                        if(data.length > 0){
+                            $(".titler").html(row.length + " Notifikasi");
+                        }else{
+                            $(".badger").hide();
+                            $(".titler").hide();
+                        }
+                      
+                        
                        
                     },error: function(err){
+                       
                       //  alert(err.responseText);
                     }
                 }
             );
         });
     </script>
+    @endif
     @yield('css')
     @yield('js')
 </head>

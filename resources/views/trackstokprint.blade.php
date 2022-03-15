@@ -69,6 +69,7 @@
             font-size: 8pt;
             margin: 0;
             text-align: left;
+            padding: 4px;
         }
 
         .barcode{
@@ -102,7 +103,7 @@
                 </tr>
                 <tr>
                     <th align="center"><p class="address">
-                            Jl. Agus Salim D no.10 <br> Telp/Fax. (024) 3554929 / 085712423453 Semarang <br>
+                            Jl. Agus Salim D no.10 <br> Telp/Fax.  085712423453 / (024) 3554929  Semarang <br>
                         </p></th>
                 </tr>
             </table>
@@ -110,18 +111,17 @@
             <br>
             <br>
             <h3>Stok Harian Produk</h3>
-        <p style="margin-bottom: 20px">Tanggal : {{date('d-M-Y')}}</p>
+        <p style="margin-bottom: 5px">Tanggal : {{$tanggal}}</p>
 
      
         @isset($m2)
-           <h5>Daftar Barang masuk melalui stok harian</h5>
-            <table class="table-data" style="width:180mm !important; margin-top: 20px; margin: 20px" >
+           <h6>Barang Masuk dari Supplier</h6>
+            <table class="table-data" style="width:180mm !important; margin-top: 5px; margin: 5px;margin-bottom: 10px" >
             <tr>
                         <th >No</th>
                         <th>Tanggal</th>
                         <th style="width:60px">Kode Produk</th>
                         <th>Nama Produk</th>
-                        <th >Merek</th>
                         <th>Jumlah</th>
                         <th>Keterangan</th>
                         <th>A. Gudang</th>
@@ -134,10 +134,9 @@
                     @foreach($m2 as $da)
                     <tr>
                        <td >{{$no}}</td>
-                       <td>{{date("d-m-y",strtotime($da->created_at))}}</td>
+                       <td>{{date("d-M-Y",strtotime($da->created_at))}}</td>
                         <td>{{$da->kode_produk}}</td>
-                        <td>{{$da->nama_produk}}</td>
-                        <td >{{$da->nama_merek}}</td>
+                        <td >{{$da->nama_kodetype." ".$da->nama_merek." ".$da->nama_produk}}</td>
                         <td>{{$da->jumlah}}</td>
                         <td >{{$da->keterangan}}</td>
                         <td >{{$da->name}}</td>
@@ -151,14 +150,13 @@
         @endisset
 
         @isset($m1)
-        <h5>Daftar Barang masuk melalui transaksi</h5>
-            <table class="table-data" style="width:180mm !important; margin-top: 20px; margin: 20px" >
+        <h6>Barang Retur</h6>
+            <table class="table-data" style="width:180mm !important; margin-top: 5px; margin: 5px" >
             <tr>
                         <th >No</th>
                         <th style="width:60px">Tanggal</th>
                         <th style="width:60px">Kode Produk</th>
                         <th>Nama Produk</th>
-                        <th >Merek</th>
                         <th>Jumlah</th>
                     </tr>
     
@@ -169,10 +167,9 @@
                     @foreach($m1 as $da)
                     <tr>
                        <td >{{$no}}</td>
-                       <td>{{date("d-m-y",strtotime($da->created_at))}}</td>
+                       <td>{{date("d-M-Y",strtotime($da->created_at))}}</td>
                         <td>{{$da->kode_produk}}</td>
-                        <td>{{$da->nama_produk}}</td>
-                        <td >{{$da->nama_merek}}</td>
+                        <td >{{$da->nama_kodetype." ".$da->nama_merek." ".$da->nama_produk}}</td>
                         <td>{{$da->jumlah}}</td>
 
                     </tr>
@@ -186,15 +183,13 @@
 
 
         @isset($k2)
-            <h5>Daftar Barang keluar melalui stok harian</h5>
-            <table class="table-data" style="width:180mm !important; margin-top: 20px; margin: 20px" >
+            <h6>Barang Revisi</h6>
+            <table class="table-data" style="width:180mm !important; margin-top: 5px; margin: 5px; margin-bottom: 10px" >
             <tr>
             <th >No</th>
                         <th style="width:60px">Kode Produk</th>
                         <th>Tanggal</th>
                         <th>Nama Produk</th>
-                        
-                        <th >Merek</th>
                         <th>Jumlah</th>
                         <th>Keterangan</th>
                         <th>A. Gudang</th>
@@ -207,10 +202,10 @@
                     @foreach($k2 as $da)
                     <tr>
                        <td >{{$no}}</td>
-                       <td>{{date("d-m-y",strtotime($da->created_at))}}</td>
+                       <td>{{date("d-M-Y",strtotime($da->created_at))}}</td>
                         <td>{{$da->kode_produk}}</td>
-                        <td>{{$da->nama_produk}}</td>
-                        <td >{{$da->nama_merek}}</td>
+                        <td >{{$da->nama_kodetype." ".$da->nama_merek." ".$da->nama_produk}}</td>
+              
                         <td>{{$da->jumlah}}</td>
                         <td >{{$da->keterangan}}</td>
                         <td >{{$da->name}}</td>
@@ -225,15 +220,14 @@
 
         
         @isset($k1)
-            <h5>Produk yang keluar melalui transaksi</h5>
-            <table class="table-data" style="width:180mm !important; margin-top: 20px; margin: 20px" >
+            <h6>Barang Terjual</h6>
+            <table class="table-data" style="width:180mm !important; margin-top: 10px; margin: 5px;margin-bottom: 10px" >
             <tr>
                         <th >No</th>
                         <th>Tanggal</th>
                         <th style="width:60px">Kode Produk</th>
                         <th>Nama Produk</th>
                       
-                        <th >Merek</th>
                        @if(Auth::user()->roles[0]['name']=='manager') <th>Harga</th> @endif
                         <th>Jumlah</th>
                     </tr>
@@ -249,10 +243,9 @@
                     @foreach($k1 as $da)
                     <tr>
                        <td >{{$no}}</td>
-                       <td>{{$da->created_at}}</td>
-                        <td>{{$da->kode_produk}}</td>
-                        <td>{{$da->nama_produk}}</td>
-                        <td >{{$da->nama_merek}}</td>
+                       <td>{{date("d-M-Y",strtotime($da->created_at))}}</td>
+                       <td>{{$da->kode_produk}}</td>
+                        <td >{{$da->nama_kodetype." ".$da->nama_merek." ".$da->nama_produk}}</td>
                         @if(Auth::user()->roles[0]['name']="manager") <td >{{number_format(Tools::doDisc($da->jumlah,$da->harga_produk,$da->potongan,$da->prefix),0,",",".")}}</td>@endif
                         <td>{{$da->jumlah}}</td>
 
@@ -266,7 +259,7 @@
                     
                     @endforeach
                     <tr>
-                    @if(Auth::user()->roles[0]['name']="manager") <td colspan="5">Total</td> @else <td colspan="6">Total</td>@endif
+                    @if(Auth::user()->roles[0]['name']="manager") <td colspan="4">Total</td> @else <td colspan="6">Total</td>@endif
                         @if(Auth::user()->roles[0]['name']="manager")<td>Rp. {{number_format($total,0,",",".")}}</td>@endif
                         <td>{{$jumlah}}</td>
 
@@ -277,14 +270,13 @@
 
         
         @isset($suplier)
-            <h5>Data retur ke suplier</h5>
-            <table class="table-data" style="width:180mm !important; margin-top: 20px; margin: 20px" >
+            <h6>Retur ke Supplier</h6>
+            <table class="table-data" style="width:180mm !important; margin-top: 5px; margin: 5px;margin-bottom: 10px" >
             <tr>
                         <th >No</th>
                         <th>Kode Produk</th>
                         <th >Tanggal</th>
                         <th>Nama Produk</th>
-                        <th >Merek</th>
                         <th>Jumlah</th>
                         <th>Keterangan</th>
                         <th>Admin Gudang</th>
@@ -298,9 +290,8 @@
                     <tr>
                        <td >{{$no}}</td>
                         <td>{{$da["kode_produk"]}}</td>
-                        <td>{{date("d-m-yy",strtotime($da['tanggal']))}}</td>
-                        <td>{{$da["nama_produk"]}}</td>
-                        <td>{{$da["nama_merek"]}}</td>
+                        <td>{{date("d-M-Y",strtotime($da['tanggal']))}}</td>
+                        <td >{{$da['nama_kodetype']." ".$da['nama_merek']." ".$da['nama_produk']}}</td>
                         <td >{{$da["jumlah"]}}</td>
                         <td>{{$da["keterangan"]}}</td>
                         <td>{{$da["Nama Admin"]}}</td>

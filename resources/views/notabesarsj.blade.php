@@ -185,6 +185,15 @@
              </tr>
              <tr>
 
+            <td valign="top">
+                <h4>Jatuh Tempo</h4>
+            </td>
+            <td colspan="2">{{date("d-M-Y", strtotime($data->jatuh_tempo))}}</td>
+
+
+            </tr>
+             <tr>
+
                 <td valign="top">
                     <h4>Kunci</h4>
                 </td>

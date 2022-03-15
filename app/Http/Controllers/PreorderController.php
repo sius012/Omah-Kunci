@@ -189,12 +189,22 @@ class PreorderController extends Controller
 
 
         $no_nota = DB::table("nota_besar")->where("id_transaksi", $id)->get()[0]->no_nota;
+        $has = DB::table("nota_besar")->where("id_transaksi", $id)->first();
+
+        if($has->kunci == null and $has->jatuh_tempo == null and $termin == 3){
+            
+        }else{
+
+
+
         DB::table("nota_besar")->where("no_nota", $no_nota)->where("termin",$termin)->update(["status" => "dibayar"]);
-        DB::table("nota_besar")->where("no_nota", $no_nota)->where("termin",$termin+1)->update(["status" => "ready"]);
-        DB::table('nota_besar')->where("id_transaksi", $id)->update(['us'=> $formdata["us"],'brp'=> $formdata["brp"]]);
+     if($termin != 3){
+        DB::table("nota_besar")->where("no_nota", $no_nota)->where("termin",$termin+1)->update(["status" => "menunggu"]);
+     }  
+        DB::table('nota_besar')->where("id_transaksi", $id)->update(['created_at'=>$req->tanggal,'us'=> $formdata["us"],'brp'=> $formdata["brp"]]);
         if($termin == 2){
             DB::table('nota_besar')->where("id_transaksi", $id)->update(['kunci'=>$req->kunci]);
-            DB::table('nota_besar')->where("no_nota", $no_nota)->where("termin",3)->update(['kunci'=>$req->kunci]);
+        }
         }
 
         return json_encode(["id_nb" => $id,"no_nota" => $no_nota]);
@@ -226,7 +236,7 @@ class PreorderController extends Controller
         $id_trans = $req->input("id_transaksi");
 
        
-        $data1 = DB::table('nota_besar')->where('id_transaksi', $id_trans)->get();
+        $data1 = DB::table('nota_besar')->where('id_transaksi', $id_trans)->select(DB::raw("substr(created_at,1,10) as tanggalbuat"),"nota_besar.*")->get();
         $data2 = DB::table('nb_detail')->where('id_nb', $id_trans)->get();
         $nn = $data1[0]->no_nota;
         
@@ -284,5 +294,54 @@ class PreorderController extends Controller
     	return response()->json(["filename" => $base64]);
     }
 
+    public function cetaksuratjalan2($id){
+        $id_trans = $id;
+        $data = DB::table("nota_besar")->where('id_transaksi', $id_trans)->get();
+        $opsi = DB::table("nb_detail")->join("nota_besar", "nota_besar.id_transaksi", "=", "nb_detail.id_nb")->where("id_nb", $id_trans)->get();
+        $pdf = PDF::loadview('notabesarsj', ["data" => $data[0],"opsi"=>$opsi]);
+        $path = public_path('pdf/');
+        $fileName =  date('mdy').'-'.$data[0]->id_transaksi. '.' . "suratjalan".'.pdf' ;
+        $pdf->save(storage_path("pdf/Surat Jalan Nota Besar/$fileName"));
+        $storagepath = storage_path("pdf/Surat Jalan Nota Besar/$fileName");
+        $base64 = chunk_split(base64_encode(file_get_contents($storagepath)));
+
+    	return $base64;
+    }
+
+    public function kirimsj(Request $req){
+        $id=$req->id_trans;
+       
+        $status=DB::table('nota_besar')->where('id_transaksi',$id)->pluck('status')->first();
+        $key=DB::table('nota_besar')->where('id_transaksi',$id)->pluck('kunci')->first();
+        if($status == "dibayar"){
+            if($key == null){
+                $no_nota = DB::table("nota_besar")->where('id_transaksi',$id)->pluck("no_nota")->first();
+                $termin = DB::table("nota_besar")->where('id_transaksi',$id)->pluck("termin")->first();
+                $update = DB::table('nota_besar')->where('no_nota',$no_nota)->update(['kunci'=>$req->kunci,"jatuh_tempo"=>$req->jt]);
+                $update2 = DB::table('nota_besar')->where('no_nota',$no_nota)->where('termin',$termin+1)->update(['kunci'=>$req->kunci,"jatuh_tempo"=>$req->jt,'status'=>'ready']);
+                return response()->json(["filename" => null]);
+            }else{
+                $base64 = $this->cetaksuratjalan2($id);
+                return response()->json(["filename" => $base64]);
+    
+            }
+      
+          
+        }
+
+        
+        
+     
+
+        
+    }
+
+
+
+    
+    public function sj2(Request $req){
+        $base64 = $this->cetaksuratjalan2($req->id_trans);
+                return response()->json(["filename" => $base64]);
+    }
   
 }

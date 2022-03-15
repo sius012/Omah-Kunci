@@ -8,14 +8,17 @@ use Maatwebsite\Excel\Concerns\FromView;
 class TransaksiExport implements FromView
 {
     public $data;
+    public $untukadmin = true;
 
-    public function __construct($data){
+    public function __construct($data,$has){
         $this->data = $data;
+        $this->untukadmin = $has;
     }
     public function view(): View
     {
         return view('laporan.transaksi', [
-            'datas' => $this->data
+            'datas' => $this->data,
+            'has'=>$this->untukadmin
         ]);
     }
 }

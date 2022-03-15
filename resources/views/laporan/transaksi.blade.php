@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+    @php $no=1  @endphp
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,7 +8,7 @@
     <title>Document</title>
 </head>
 <body>
-    @foreach($datas as $i => $dts)
+    
     <table>
         <tr>
             <th>No</th>
@@ -15,41 +16,24 @@
             <th>Nama Pelanggan</th>
             <th>Produk</th>
             <th>jumlah</th>
-            <th>total</th>
+    @if($has)   <th>total</th>@endif
         </tr>
+        @foreach($datas as $i => $dts)
         @for($j=0;$j<(int)$dts['jmltrans'];$j++)
             <tr>
-                <td>{{$j+1}}</td>
+                <td>{{$no}}</td>
        @if($j==0)  
                      <td rowspan="{{$dts['jmltrans']}}">{{date("d-M-Y",strtotime($dts['datas']->created_at))}}</td>
                      <td rowspan="{{$dts['jmltrans']}}">{{$dts['datas']->nama_pelanggan}}</td>
        @endif
                 <td>{{$dts[$j]->nama_kodetype." ".$dts[$j]->nama_merek." ".$dts[$j]->nama_produk." "}}</td>
                 <td>{{$dts[$j]->jumlah}}</td>
-                <td>{{Tools::doDisc($dts[$j]->jumlah,$dts[$j]->harga_produk,$dts[$j]->potongan,$dts[$j]->prefix),0,".","."}}</td>
+           @if($has)     <td>{{Tools::doDisc($dts[$j]->jumlah,$dts[$j]->harga_produk,$dts[$j]->potongan,$dts[$j]->prefix),0,".","."}}</td>@endif
             </tr>
+        @php $no++ @endphp
         @endfor
-        <tr>
-            <td colspan="5">Total</td>
-            <td>{{number_format($dts['datas']->subtotal)}}</td>
-        </tr>
-        <tr>
-            <td colspan="5">Diskon</td>
-            <td>{{number_format($dts['datas']->diskon)}}</td>
-        </tr>
-        <tr>
-            <td colspan="5">Harga Akhir</td>
-            <td>{{number_format($dts['datas']->subtotal - $dts['datas']->diskon)}}</td>
-        </tr>
-        <tr>
-            <td colspan="5">Dibayar</td>
-            <td>{{number_format($dts['datas']->bayar)}}</td>
-        </tr>
-        <tr>
-            <td colspan="5">Kembalian</td>
-            <td>{{number_format($dts['datas']->bayar - -($dts['datas']->subtotal - $dts['datas']->diskon))}}</td>
-        </tr>
+        @endforeach
     </table>
-    @endforeach
+ 
 </body>
 </html>

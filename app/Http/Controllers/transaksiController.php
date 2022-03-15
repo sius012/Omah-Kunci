@@ -136,6 +136,13 @@ class transaksiController extends Controller
         $tglstart = $req->md;
         $tglend = $req->sd;
 
+        $has = false;
+
+        if(isset($req->cua)){
+            $has = false;
+        }else{
+            $has = true;
+        }
         $datas = DB::table("transaksi")->where("status","!=","draf")->whereBetween(DB::raw('substr(created_at,1,10)'),[$tglstart,$tglend])->get();
 
         $data = [];
@@ -154,6 +161,6 @@ class transaksiController extends Controller
         }
       // dd($data);
 
-      return Excel::download(new TransaksiExport($data), "check.xls");
+      return Excel::download(new TransaksiExport($data,$has), $has == true ? "Manager" : "Admin Gudang"." - Data Transaksi ".$tglstart." - ".$tglend.".xls");
     }
 }

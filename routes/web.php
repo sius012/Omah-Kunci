@@ -39,7 +39,8 @@ Route::middleware(["role:kasir|manager"])->group(function(){
     Route::post('/removesection','Kasir2Controller@remover');
     Route::get('/kasir', 'Kasir2Controller@index')
 ->name("kasir");
-
+    Route::post("/kirimsj","PreorderController@kirimsj")->name("kirimsj");
+    Route::post("/kirimsj2","PreorderController@sj2")->name("kirimsj2");
     Route::post('/downloadtrans','transaksiController@downloadtransaksi')->name('download_trans');
     
     Route::post('/tambahItem', 'KasirController@tambahTransaksiDetail');
@@ -142,6 +143,7 @@ Route::post('/rejecting', 'DSMController@rejecting');
     Route::get('/hapuspaket/{id}', 'PaketController@hapuspaket')->name('hapuspaket');
     Route::get('/editpaket/{id}', 'PaketController@editpaket')->name('editpaket');
     Route::post('/downloaddatauser', 'transaksiController@downloaduser');
+    
  });
 
 
