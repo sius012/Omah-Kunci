@@ -18,7 +18,7 @@ $master='home'; @endphp
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header mb-0 bg-primary text-light">
+                <div style="background-color: #022F59;" class="card-header mb-0 text-light">
                     <h5 class="card-title mt-2">Laporan harian</h5>
                     <h5 class="card-title float-right mt-2"><b>Hari Ini,
                             {{ date('d M Y') }}</b></h5>
@@ -67,7 +67,7 @@ $master='home'; @endphp
                 </div>
             </div>
             <div class="card">
-                <div class="card-header mb-0 bg-primary text-light">
+                <div style="background-color: #022F59;" class="card-header mb-0 text-light">
                     <h5 class="card-title mt-2">Laporan mingguan</h5>
                     <h5 class="card-title float-right mt-2"><b>Hari Ini,
                             {{ date('d M Y') }}</b></h5>
@@ -116,7 +116,7 @@ $master='home'; @endphp
                 </div>
             </div>
             <div class="card">
-                <div class="card-header mb-0 bg-primary text-light">
+                <div style="background-color: #022F59;" class="card-header mb-0 text-light">
                     <h5 class="card-title mt-2">Laporan bulanan</h5>
                     <h5 class="card-title float-right mt-2"><b>Hari Ini,
                             {{ date('d M Y') }}</b></h5>
@@ -174,15 +174,15 @@ $master='home'; @endphp
 
         <div class="col-md-4">
             <!-- Info Boxes Style 2 -->
-            <div class="info-box mb-3 bg-warning">
-                <span class="info-box-icon"><i class="fas fa-archive text-dark"></i></span>
+            <div style="background-color: #022F59;" class="info-box mb-3 text-light">
+                <span class="info-box-icon"><i class="fas fa-archive"></i></span>
 
                 <div class="info-box-content">
                     <span class="info-box-text">Gudang</span>
                     <span class="info-box-number">{{number_format($produk) }} Produk</span>
                 </div>
 
-                <a href="{{url('/produk')}}"> <span class="info-box-icon"><i class="fa fa-list bg-dark text-warning p-2 rounded-circle"></i></span></a>
+                <a href="{{url('/produk')}}"> <span class="info-box-icon mt-3"><i style="font-size: 1rem" class="fa fa-list bg-light text-dark p-2 rounded-circle"></i></span></a>
                 <!-- /.info-box-content -->
             </div>
             <!-- /.info-box -->
@@ -197,7 +197,7 @@ $master='home'; @endphp
 
         </div>
         <div class="col">
-            <div class="info-box mb-3 bg-info">
+            <div style="background-color: #022F59;" class="info-box mb-3 text-light">
                 <span class="info-box-icon"><i class="fa fa-inbox"></i></span>
 
                 <div class="info-box-content">
@@ -205,21 +205,21 @@ $master='home'; @endphp
                     <span class="info-box-number">{{$pt}} Item</span>
                 </div>
 
-                <a href="{{url('/transaksi')}}"><span class="info-box-icon"><i class="fa fa-list bg-light text-info p-2 rounded-circle"></i></span></a>
+                <a href="{{url('/transaksi')}}"><span class="info-box-icon mt-3"><i style="font-size: 1rem" class="fa fa-list bg-light text-info p-2 rounded-circle"></i></span></a>
                 <!-- /.info-box-content -->
             </div>
 
         </div>
         <div class="col">
-            <div class="info-box mb-3 bg-light">
-                <span class="info-box-icon"><i class="far fa-user text-dark"></i></span>
+            <div style="background-color: #022F59;" class="info-box mb-3 text-light">
+                <span class="info-box-icon"><i class="far fa-user"></i></span>
 
                 <div class="info-box-content">
                     <span class="info-box-text">Pengguna</span>
                     <span class="info-box-number">{{$user}} Pengguna</span>
                 </div>
 
-                <a href="{{route('ma')}}"><span class="info-box-icon"><i class="fa fa-list bg-primary p-2 rounded-circle"></i></span></a>
+                <a href="{{route('ma')}}"><span class="info-box-icon mt-3"><i style="font-size: 1rem" class="fa fa-list bg-light p-2 rounded-circle"></i></span></a>
                 <!-- /.info-box-content -->
             </div>
         </div>
