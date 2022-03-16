@@ -3,40 +3,16 @@ $master='kasir' @endphp
 @extends('layouts.layout2')
 
 @section('pagetitle', 'Nota Besar')
+@section('icon', 'fa fa-sticky-note mr-2 ml-3')
 @section('title', 'Nota Besar')
 
 @section('js')
 <script src="{{ asset('js/print.js') }}"></script>
+<script src="{{ asset('js/transaksi.js') }}"></script>
+<script src="{{ asset('js/notabesar.js') }}"></script>
+@isset($id)
 <script>
-    function searchnota(kw){
-        $.ajax({
-            headers: {
-                "X-CSRF-TOKEN" : $("meta[name=csrf-token]").attr('content')
-            },
-            data: {
-                kw : kw
-            },
-            url: "/searchnotapreorder",
-            type: "post",
-            dataType: "json",
-            success: function(data){
-                console.log(data);
-                let row = data.map(function(datas){
-                    return `
-                <li><a href="#"  id_nb = ${datas['id_transaksi']} class='${datas['jatuh_tempo'] == null && datas['status']  == "menunggu"  && datas['kunci'] == null ? "disab" :  "cc"}'>${datas['no_nota'] + "  " + "Termin: " + datas['termin']}</a></li>
-
-                    `;
-                });
-
-                $("#myUL").html(row);
-            },
-            error: function(err){
-                Swal.fire(err.responseText)
-            }
-
-        });
-    }
-    function tampilkannb($id_trans){
+    $(document).ready(function() {
         $(".readonly").attr("readonly","readonly");
         $("#notabesar").hide();
         $(".kunci").hide();
@@ -47,14 +23,16 @@ $master='kasir' @endphp
                 "X-CSRF-TOKEN": $("meta[name=csrf-token]").attr('content')
             , }
             , data: {
-                id_transaksi: $id_trans
+                id_transaksi: "{{$id}}"
             }
             , url: "/getnb"
             , type: "post"
             , dataType: "json"
             , success: function(data) {
                 $("#baseinputnb input, label").show();
-         
+                if(data["nb"][0]["termin"] == 2){
+                    $("#suratjalan").show();
+                }
 
                 if(data['nb'][0]['termin'] == 2){
                     $(".kunci").show();
@@ -75,12 +53,10 @@ $master='kasir' @endphp
                 $("#brp").val(data['nb'][0]['brp']);
                 $("#gm").val(data['nb'][0]['gm']);
                 $("#total").val(parseInt(data['nb'][0]['total']).toLocaleString());
-                $("#total2").val(parseInt(data['nb'][0]['total']));
-                $("#nn").html("No Nota: " + "<a class='nnt' href=#>"+data["nb"][0]["no_nota"]+"</a>");
-                $("#tgl").val(data["nb"][0]["tanggalbuat"]);
+                $("#nn").text("No Nota: " + data["nb"][0]["no_nota"]);
+                $("#tgl").val(data["nb"][0]["created_at"]);
                 $("#jt").val(data["nb"][0]["jatuh_tempo"]);
                 $("#termin").val(data['nb'][0]['termin']);
-                 $("#jt").attr("disabled",'disabled');
 
                 let row = data["opsi"].map(function(e, i) {
                     return `
@@ -99,8 +75,7 @@ $master='kasir' @endphp
                 $("#preorderform").attr("action", "/bayarpreorder");
                 $("#id_trans").val(data["nb"][0]["id_transaksi"]);
                 $(".td").show();
-                $("#td2").val(parseInt(data["td"]));
-                $(".td").children("#td").val(parseInt(data["td"]).toLocaleString());
+                $(".td").children("input").val(parseInt(data["td"]).toLocaleString());
                 $("#addopsi").hide();
                // $("#suratjalan").attr("disabled","disabled");
                 if (data["nb"][0]["status"] == "dibayar") {
@@ -113,53 +88,22 @@ $master='kasir' @endphp
                     $("#buttonsubmit").addClass("btn-success");
                     $("#printbutton").removeAttr("disabled");
                     $("#suratjalan").removeAttr("disabled");
-                   
-                    if(data["nb"][0]["termin"] == 2){
-                        $("#suratjalan").show();
-                    }
-                  
- 
+                    $("#kunci").attr("readonly",'readonly');
 
                 } else {
-                    $("#us").removeAttr("disabled");
-                    $("#us").removeAttr("disabled");
                     $("#buttonsubmit").removeAttr("disabled");
                     $("#buttonsubmit").removeClass("btn-success");
                     $("#buttonsubmit").addClass("btn-primary");
                     $("#buttonsubmit").text("Bayar");
                     $("#printbutton").attr("disabled", "disabled");
-                    $("#kunci").removeAttr("readonly");
-                    $("#jt").removeAttr('readonly');
-                    
-                   $("#jt").removeAttr('readonly');
-                }
-
-                if(data['nb'][0]['kunci'] == null){
-                    $("#tbsj").text("Kirim");
-                    $("#jt").removeAttr("disabled");
-                }else{
-                    
-                    $("#tbsj").text("Cetak");
                 }
                 $(".readonly").attr('readonly', 'readonly');
             }
             , error: function(err) {
-              
                 Swal.fire("error", "", "info");
             }
         });
 
-
-
-    }
-</script>
-<script src="{{ asset('js/transaksi.js') }}"></script>
-<script src="{{ asset('js/notabesar.js') }}"></script>
-@isset($id)
-<script>
-    $(document).ready(function() {
-        var idt = "{{$id}}";
-        tampilkannb(idt);
 
     });
 
@@ -236,7 +180,15 @@ $master='kasir' @endphp
                             <label for="exampleInputPassword1">Guna Membayar</label>
                             <input type="text" class="form-control readonly" id="gm" required>
                         </div>
-    
+                        <div class="form-group jt">
+                            <label for="exampleInputPassword1">Jatuh Tempo</label>
+                            <input type="date" class="form-control readonly" id="jt" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="kunci" for="exampleInputPassword1">Kunci</label>
+                            <input type="text" class="form-control kunci" id="kunci">
+                        </div>
+
 
 
                     </div>
@@ -262,8 +214,8 @@ $master='kasir' @endphp
                 <button type="submit" class="btn btn-primary" id="buttonsubmit">Kirim</button>
                 <button type="button" class="btn btn-primary ml-2" href="/notabesar" id="resetbutton"><i class="fa fa-back"></i>Kembali</button>
                
-                <button type="button" class="btn btn-warning ml-2" id="printbutton"><i class="fa fa-print mr-2"></i>Print</button>
-                <button type="button" id="suratjalan" data-toggle="modal" data-target="#exampleModal" class="btn btn-primary float-right ml-2">Surat Jalan</button>
+                <button type="button" class="btn btn-primary ml-2" id="printbutton"><i class="fa fa-print mr-2"></i>Print</button>
+                <button type="button" id="suratjalan" data-toggle="modalgi" data-target="#exampleModal" class="btn btn-primary float-right ml-2">Surat Jalan</button>
             </div>
         </div>
         </form>
@@ -283,22 +235,19 @@ $master='kasir' @endphp
         </button>
       </div>
       <div class="modal-body">
-        <form action="" id="sjsubmit">
         <div class="form-group">
-          <label>Jatuh Tempo : </label>
-          <input id="jt" type="date" class="form-control">
+          <label>Keterangan : </label>
+          <textarea class="form-control"></textarea>
         </div>
         <div class="form-group">
-          <label>Kunci : </label>
-          <input id="kunci" type="text" class="form-control">
+          <label>Keterangan lainnya : </label>
+          <textarea class="form-control"></textarea>
         </div>
-        
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-        <button type="submit" class="btn btn-primary" id="tbsj">Simpan</button>
+        <button type="button" class="btn btn-primary">Simpan</button>
       </div>
-</form>
     </div>
   </div>
 </div>

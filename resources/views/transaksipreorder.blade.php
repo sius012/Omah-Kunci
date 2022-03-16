@@ -4,7 +4,8 @@ $hastoday = false;
 
 $master='kasir' @endphp
 @extends('layouts.layout2')
-@section('pagetitle', 'Transaksi Preorder')
+@section('pagetitle', 'Riwayat Nota Besar')
+@section('icon', 'fa fa-history mr-2 ml-2')
 
 @section('title', 'Riwayat Transaksi')
 
@@ -57,31 +58,6 @@ $master='kasir' @endphp
             }
         });
     });
-
-    $("#sj2").click(function(e){
-        
-        $.ajax({
-            headers: {
-                "X-CSRF-TOKEN" : $("meta[name=csrf-token]").attr('content')
-            },
-            url: "/kirimsj2",
-            type: "post",
-            data: {
-                id_trans : $(this).attr('id_trans'),
-              
-            },
-            success: function(response){
-              
-                 printJS({printable: response['filename'], type: 'pdf', base64: true, style: '@page { size: Letter landscape; }'});
-              
-            },error: function(err){
-                 alert(err.responseText);
-            }
-         });
-    });
-
-
-
       });
     </script>
 @endsection
@@ -120,16 +96,17 @@ $master='kasir' @endphp
                 </div>
                 <input type="hidden" >
                 <table class="table table-borderless m-0">
-       
                       <tr style="font-size: 0.75rem;">
                           <th style="width: 200px"><div >Telah diterima dari</div></th>
                           <th style="width: 200px"><div >Total</div></th>
                           <th style="width: 120px"><div >Tagihan 1</div></th>
                           <th style="width: 120px"><div >Tagihan 2</div></th>
                           <th style="width: 120px"><div >Tagihan 3</div></th>
-                          <td style="width: 110px" rowspan="2" align="center" valign="center" class=""><div class="mt-3 justify-content-center">
+                          <td style="width: 110px" rowspan="2" align="center" valign="center" class="">
+                            <div class="mt-3 justify-content-center">
                               <a href="{{route('showdetail',['no_nota'=>$datas['no_nota']])}}" class="" ><i style="background-color:#1562AA; color:white; padding:10px; border-radius:100%;" class="fa fa-list"></i></a>
-                          </div></td>
+                            </div>
+                          </td>
                       </tr>
                    
                       <tr style="font-size: 0.50rem;">
@@ -224,7 +201,6 @@ $master='kasir' @endphp
             </div>
         </div>
         <div class="modal-footer">
-       @if($info[2]->status == 'ready' or $info[2]->status == 'dibayar') <button class="btn btn-primary" id="sj2" id_trans="{{$info[1]->id_transaksi}}">Surat Jalan</button>@endif
         <button id="printbutton" type="button" id_nb=" @if($info[1]->status == 'dibayar' and @info[2]->status == 'ready') {{$info[1]->id_transaksi}} @elseif( $info[2]->status == 'dibayar') {{$info[2]->id_transaksi}} @else  {{$info[0]->id_transaksi}} @endif" class="btn btn-primary">Cetak</button>
           <button type="button" class="btn btn-secondary btnClose" data-dismiss="modal">Tutup</button>
         </div>
