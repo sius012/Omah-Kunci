@@ -10,6 +10,7 @@ $hastoday = false;
 @endphp
 @extends('layouts.layout2')
 @section('pagetitle', 'Riwayat Preorder')
+@section('icon', 'fa fa-history mr-2 ml-2')
 @section('title', 'Riwayat Transaksi')
 
 
