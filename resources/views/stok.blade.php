@@ -15,7 +15,7 @@ $master='admingudang';
     
 @section('content')
 <div class="card">
-<div class="card-header"><h3>Kelola Stok <i class='fas fa-box ml-2'></i></h3>
+<div class="card-header"><h3><i class='fas fa-box mr-2'></i>Kelola Stok</h3>
 <div class="card-body">
 <div class="wrapper">
 <form action="{{route('stok')}}" method="GET">
@@ -47,7 +47,7 @@ $master='admingudang';
                         @endforeach
                     </select>
                 </div>
-                <div style="margin-left: 20px;" class="form-group d-inline-flex">
+                <div style="margin-left: -15px;" class="form-group d-inline-flex">
                     <select name="jumlahstok" id="jumlahstok" class="form-control dynamic w-100 form-control-sm" data-dependent = "state">
                         <option value="">Jumlah Stok</option>
   
@@ -57,12 +57,12 @@ $master='admingudang';
                     </select>
                 </div>
                 </div>
-              <button type="submit" class="btn btn-primary btn-sm ml-2">Cari</button>
+              <button type="submit" class="btn btn-primary btn-sm ml-2"><i class="fa fa-search"></i></button>
             </div>
 </form>
 
-<button type="button m-3" class="btn btn-warning"  id="generatestok" ><i class="fas fa-upload mr-2"></i>Produk ke Stok</button>
-<a class="btn btn-warning float-right" href="#" id="stokprint"><i class="fa fa-print mr-2"></i>Print</a>
+<button type="button m-3" class="btn btn-primary"  id="generatestok" ><i class="fas fa-upload mr-2"></i>Produk ke Stok</button>
+<a class="btn btn-primary float-right" href="#" id="stokprint"><i class="fa fa-print mr-2"></i>Print</a>
 <div>
 
     <table class="table table-striped mt-3 table-bordered ">

@@ -38,18 +38,16 @@ $m = isset($mereknya) ? $mereknya : '';
 
     <div class="card">
         <div class="card-header">
-            <h2 style="font-size: 1.5rem;" class="card-title mt-2 font-weight-bold">Data Produk</h2>
-            <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#modalproduk">
-                Tambah Produk <i class="fa fa-plus ml-2"></i>
-            </button>
+            <h2 style="font-size: 1.5rem;" class="card-title mt-2 font-weight-bold"><i class="fa fa-list mr-3"></i>Data Produk</h2>
         </div>
         <div class="card-body">
-            {!! Form::open(['action'=> 'ProdukController@index','method'=>'GET']) !!}
+            <form action="ProdukController@index" method="get">
                 @csrf
-                <h5 class="card-title">Cari Berdasarkan : </h5>
-                <br>
                 <input type="text" name="nama" class="form-control form-control-sm w-25" placeholder="ketik nama atau kodeproduk">
-                <div class="wrappers d-inline-flex mt-3">
+                <br>
+                <h5 class="card-title mb-0">Cari Berdasarkan : </h5>
+                <br>
+                <div class="wrappers d-inline-flex mt-1">
                     
                 <div class="form-group d-inline-flex">
                     
@@ -68,7 +66,7 @@ $m = isset($mereknya) ? $mereknya : '';
                         @endforeach
                     </select>
                 </div>
-                <div style="margin-left: -30px;" class="form-group d-inline-flex">
+                <div style="margin-left: -43px;" class="form-group d-inline-flex">
                     <select name="merek" id="merek" class="form-control dynamic w-75 form-control-sm" data-dependent = "state">
                         <option value="">MEREK</option>
                         @foreach($merek as $merks)
@@ -77,8 +75,10 @@ $m = isset($mereknya) ? $mereknya : '';
                     </select>
                 </div>
                 </div>
-            {{Form::submit('Cari',['class'=>'btn btn-primary btn-sm'])}}
-
+                <button style="margin-left: -20px" class="btn btn-sm btn-primary"><i class="fa fa-search"></i></button>
+                <button type="button" class="btn btn-sm mt-1 btn-primary float-right" data-toggle="modal" data-target="#modalproduk">
+                    Tambah Produk <i class="fa fa-plus ml-2"></i>
+                </button>
             </form>
 
             <table class="table table-striped mt-1 table-bordered">
@@ -90,9 +90,6 @@ $m = isset($mereknya) ? $mereknya : '';
                         <th>Merek</th>
                         <th>Barcode</th>
                         <th style="width:180px;">Nama Produk</th>
-                        
-                        
-                        
                         <th>Satuan</th>
                         <th style="width:130px;">Harga</th>
                         <th>Diskon</th>
@@ -115,13 +112,13 @@ $m = isset($mereknya) ? $mereknya : '';
                             <td>Rp. {{ number_format($produks->harga) }}</td>
                             <td>{{$produks->diskon_tipe == "persen" ? $produks->diskon."%" : "Rp.".number_format((int)$produks->diskon) }}</td>
                             <td class="d-inline-flex" align="center">
-                                <a class="btn btn-warning"
+                                <a class="btn btn-primary"
                                     href={{ url('/editproduk?kodebarcode=' . $produks->kode_produk) }}><i
                                         class="fa fa-edit"></i></a>
                                 <a class="btn btn-danger ml-1 mr-1 hapusproduk"
                                     href="{{ route('hapusproduk', ['kode' => $produks->kode_produk]) }}"><i
                                         class="fa fa-trash"></i></a>
-                                <a kode_produk='{{ $produks->kode_produk }}' href="#" class="btn btn-warning cetak-barcode"
+                                <a kode_produk='{{ $produks->kode_produk }}' href="#" class="btn btn-primary cetak-barcode"
                                     data-toggle="modal" data-target="#exampleModal"><i class="fa fa-barcode"></i></a>
                             </td>
                         </tr>

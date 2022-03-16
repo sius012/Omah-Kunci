@@ -3,6 +3,7 @@
     $master='admingudang';
 @endphp
 @extends('layouts.layout2')
+@section('icon', 'fa fa-cube ml-3 mr-2')
 
 @section('pagetitle', 'Stok Harian')
 
@@ -31,11 +32,11 @@
 
                         <button type="button" class="btn btn-tambah-data bg-warning ml-2 float-right"
                             data-toggle="modal" data-target="#exampleModals">
-                            Return Barang
+                            <i class="fa fa-undo mr-2"></i>Return Barang
                         </button>
 
                         <button type="button" class="btn float-right btn-tambah-data" data-toggle="modal"
-                            data-target="#exampleModal">Tambah Data</button>
+                            data-target="#exampleModal"><i class="fa fa-plus mr-2"></i>Tambah Data</button>
 
                         
                     </div>
@@ -87,7 +88,6 @@
 
                                 <div class="form-group parent1">
                                     <label for="produk-select">Produk</label>
-                                    <span id="namaind"></span>
                                     <input class="custom-select inputan-produk" name="produk-select" id="produk-select">
 
                                     <ul class="myUL">
@@ -230,13 +230,16 @@
                                 </div>
                                 <div class="form-row mt-3 " id="first-row">
                                     <div class="col-6 parent1">
-                                        <label for="">Produk: </label>
-                                        <span></span>
+                                        <label for="">Kode Produk</label>
                                         <input type="text" class="form-control inputan-produk"
                                             placeholder="Ketik Kode Atau Nama" name='kode[]'>
                                         <ul class="myUL">
 
                                         </ul>
+                                    </div>
+                                    <div class="col-3 parent1">
+                                        <label for="">Nama</label>
+                                        <input type="text" class="form-control nama-produk" placeholder="Nama Produk">
                                     </div>
                                     <div class="col parent1">
                                         <label for="">Jml</label>

@@ -5,6 +5,7 @@
 @extends('layouts.layout2')
 
 @section('title', "Paket")
+@section('icon', 'fa fa-cubes mr-3')
 @section('pagetitle', "Paket")
 @section("js")
     <script src="{{asset('js/paket/paket.js')}}"></script>
@@ -40,7 +41,7 @@
 @section('content')
 
 
-<button style="background-color: #094985;" data-target="#modalpaket" data-toggle="modal" class=" btn mb-4 text-light">Tambah Paket</button>
+<button style="background-color: #094985;" data-target="#modalpaket" data-toggle="modal" class=" btn mb-4 text-light"><i class="fa fa-plus mr-2"></i>Tambah Paket</button>
 <div class="wrapper card p-1">
 <table style="font-size: 0.75rem" class="table table-borderless  mt-3">
 <thead>
