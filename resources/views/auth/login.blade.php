@@ -103,9 +103,6 @@
             <button type="submit">Log In</button>
         </div>
         <hr class="bg-light mb-4" style="width: 298px;">
-        <div class="request-akuns d-flex align-items-center justify-content-center">
-            <a class="request-akunr" href="{{url('/register')}}">Request Akun</a>
-        </div>
     </div>
     </form>
 </body>

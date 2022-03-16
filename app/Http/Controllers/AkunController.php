@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Auth\RegisterController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -32,5 +34,19 @@ class AkunController extends Controller
         DB::table('users')->where('id', $id)->delete();
         DB::table('model_has_roles')->where('model_id', $id)->delete();
         return back();
+    }
+
+    public function tambahakun(Request $req){
+        $new = new RegisterController;
+        $new->validator($req->input());
+        $new->create($req->input());
+        $req->session()->flash('info','Permintaan Dikirim');
+        return back();
+    }
+
+    public function em(Request $req){
+        $email = $req->email;
+        $count = DB::table('users')->where('email',$email)->count();
+        return json_encode(['jml'=>$count]);
     }
 }

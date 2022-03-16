@@ -143,7 +143,8 @@ Route::post('/rejecting', 'DSMController@rejecting');
     Route::get('/hapuspaket/{id}', 'PaketController@hapuspaket')->name('hapuspaket');
     Route::get('/editpaket/{id}', 'PaketController@editpaket')->name('editpaket');
     Route::post('/downloaddatauser', 'transaksiController@downloaduser');
-    
+    Route::post('/tambahakun', 'AkunController@tambahakun');
+    Route::post('/emailmatch','AkunController@em');
  });
 
 
