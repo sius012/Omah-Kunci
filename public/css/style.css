@@ -40,10 +40,9 @@
 
   @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
   @font-face {
-      font-family: 'Open Sans Bolder';
-      font-style: normal;
-      font-weight: 300;
-      src: url("../../storage/fonts/OpenSans-SemiBold.ttf");
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 200;
+      src: url('../../storage/fonts/Quicksand-Regular.ttf');
   }
   
   * {
@@ -52,8 +51,10 @@
   
   .content-wrapper {
       background-color: #f0eeee;
-  
-  
+  }
+  .wrapper .sidebar-title-header{
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 300;
   }
   
   .bg {
@@ -84,10 +85,8 @@
   }
   
   .brand-text {
-      color: white;
-      font-weight: bold;
       margin-left: 10px;
-      font-family: 'Open Sans', sans-serif;
+      font-family: 'Quicksand', sans-serif;
   }
   
   .brand-image {
