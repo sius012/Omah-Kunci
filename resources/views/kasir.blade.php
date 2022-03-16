@@ -5,8 +5,7 @@
 @extends('layouts.layout2')
 
 @section('title', 'Kasir')
-
-
+@section('icon', 'fas fa-cash-register mr-2 ml-2')
 @section('pagetitle', 'Kasir')
 
 
@@ -155,7 +154,7 @@
                             </div>
 
                             <div class="card-footer">
-                                <button href="" class="btn btn-success beforesend" id="tambahproduk">Tambah Produk</button>
+                                <button href="" class="btn btn-success beforesend" id="tambahproduk"><i class="fa fa-plus mr-2"></i>Tambah Produk</button>
                             </div>
                         </div>
                     </div>
@@ -258,7 +257,7 @@
                                     <button class="btn reset " id="reset-button"><i class="fa fa-trash mr-3"></i>Buang</button>
                                 </div>
                                 <div class="row">
-                                    <button class="next text-light" id="next-button">Lanjut</button>
+                                    <button class="next text-light" id="next-button"><i class="fa fa-arrow-right mr-3"></i>Lanjut</button>
                                 </div>
                             </div>
                         </div>
