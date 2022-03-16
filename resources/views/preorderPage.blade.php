@@ -164,7 +164,7 @@ $hastoday = false;
                 <div>Tanggal Transaksi</div>
             </th>
             <th rowspan="2" style="width:120px;">
-                <div class="mt-3"><a id_trans="{{$datas->id}}" class="btn btn-info btninfo"><i style="" class="fa fa-info"></i></a></div>
+                <div class="mt-3"><a id_trans="{{$datas->id}}" class="btn btn-primary px-3 btninfo"><i style="" class="fa fa-info"></i></a></div>
             </th>
         </tr>
       

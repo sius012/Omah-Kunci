@@ -120,7 +120,7 @@ $master='kasir' @endphp
 <div class="container-fluid ">
     <div class="col">
         <div class="form-group">
-            <input type="text" id="searcher-nota" class="form-control" placeholder="Cari Nomer Nota">
+            <input type="text" id="searcher-nota" class="form-control" placeholder="Cari Nomor Nota">
             <ul id="myUL">
             </ul>
         </div>

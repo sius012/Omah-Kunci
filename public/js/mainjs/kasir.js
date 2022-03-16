@@ -503,7 +503,7 @@ $(document).ready(function () {
                         hasfinish = true;
                         $("#selesai").removeClass("selesaiindi");
                         $("#selesai").addClass("printindi");
-                        $("#selesai").html("<i class='fa fa-print'></i>Cetak");
+                        $("#selesai").html("<i class='fa fa-print mr-3'></i>Cetak");
                         Swal.fire(
                             'Transaksi Berhasil!',
                             '',

@@ -48,7 +48,7 @@
 <body>
     <div class="wrapper m-3 ml-4 mb-2">
         <div class="header d-inline-flex">
-            <img style="height: 60px;" class="img-header" src="{{ asset('assets/Group 1.svg') }}">
+            <img style="height: 40px;" class="img-header" src="{{ asset('assets/Group 1.svg') }}">
         </div>
     </div>
 
@@ -92,8 +92,8 @@
                 </div>
             </div>
             <div style="width: 1210px;" class="row mt-5">
-                <footer class="ml-1 mt-4 pb-4" style="width: 1600px; margin-left:-100px; margin-top: 13px; padding: 20px;">
-                    <p class="card-text text-left text-light mt-2 ml-0 mb-4">
+                <footer class="mt-5" style="width: 1600px; margin-left:-40px; margin-top: 13px;">
+                    <p class="card-text text-left text-light mt-5 ml-0">
                         Copyright © 2022 Omah Kunci. All rights reserved.
                     </p>
                 </footer>

@@ -30,7 +30,7 @@
                         <button style="font-size: 0.85rem" type="button" class="btn float-right btn-primary ml-2" data-toggle="modal"
                         data-target="#cetakmodal"><i style="font-size: 0.85rem" class="fa fa-print mr-1"></i>Print</button>
 
-                        <button type="button" class="btn btn-tambah-data bg-warning ml-2 float-right"
+                        <button type="button" class="btn btn-tambah-data btn-primary ml-2 float-right"
                             data-toggle="modal" data-target="#exampleModals">
                             <i class="fa fa-undo mr-2"></i>Return Barang
                         </button>

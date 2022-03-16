@@ -43,7 +43,7 @@ $m = isset($mereknya) ? $mereknya : '';
         <div class="card-body">
             <form action="ProdukController@index" method="get">
                 @csrf
-                <input type="text" name="nama" class="form-control form-control-sm w-25" placeholder="ketik nama atau kodeproduk">
+                <input type="text" name="nama" class="form-control form-control-sm w-25" placeholder="ketik nama atau kode produk">
                 <br>
                 <h5 class="card-title mb-0">Cari Berdasarkan : </h5>
                 <br>
