@@ -131,11 +131,12 @@
                     @foreach($datas as $da)
                     <tr>
                        <td >{{$no}}</td>
-                        <td>{{$da->kode_produk}}</td>
-                        <td>{{$da->nama_produk}}</td>
+                       
                         <td >{{$da->nama_tipe}}</td>
                         <td>{{$da->nama_kodetype}}</td>
                         <td>{{$da->nama_merek}}</td>
+                        <td>{{$da->kode_produk}}</td>
+                        <td>{{$da->nama_produk}}</td>
                         @if(auth()->user()->roles[0]['name']=='manager')<td>{{number_format($da->harga)}}</td>@endif
                         <td >{{$da->jumlah}} {{$da->satuan}}</td>
                     </tr>

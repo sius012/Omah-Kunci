@@ -14,6 +14,11 @@ $no=1;
 <link rel="stylesheet" href="{{ asset('css/manajemen_akun.css') }}">
 <link rel="stylesheet" href="{{ asset('css/open_sans.css') }}">
 <script src="{{ asset('js/akun.js') }}"></script>
+@if ($message = Session::get('info'));
+	<script>
+        Swal.fire("Permintaan Dikirim","","info");
+    </script>
+@endif
 @stop
 @php$no = 1; @endphp
 
@@ -94,23 +99,36 @@ $no=1;
             </div>
             <div class="modal-body">
                 <div class="container">
+                <form action="{{url('/tambahakun')}}" id="tambahakun" method="post">
+                    @csrf
                     <div class="form-group">
                         <label>Nama Pengguna : </label>
-                        <input class="form-control mb-2" placeholder="Nama akun" type="text">
+                        <input class="form-control mb-2" name="name" placeholder="Nama akun" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Email : </label>
+                        <input class="form-control mb-2" name="email" placeholder="Email" type="email">
+                    </div>
+                    <div class="form-group">
+                        <label>Password : </label>
+                        <input class="form-control mb-2" name="password" placeholder="Password" type="password">
                     </div>
                     <div class="form-group">
                         <label>Role : </label>
-                        <select class="form-control">
-                            <option>Kasir</option>
-                            <option>Admin Gudang</option>
+                        <select class="form-control" name="role">
+                            <option value="kasir">Kasir</option>
+                            <option value="admin gudang" >Admin Gudang</option>
+                            <option value="manager" >Manager</option>
                         </select>
                     </div>
+                   
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-primary"><i class="fa fa-plus mr-2"></i>Tambah</button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-plus mr-2"></i>Tambah</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
