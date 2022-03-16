@@ -87,6 +87,7 @@
 
                                 <div class="form-group parent1">
                                     <label for="produk-select">Produk</label>
+                                    <span id="namaind"></span>
                                     <input class="custom-select inputan-produk" name="produk-select" id="produk-select">
 
                                     <ul class="myUL">
@@ -229,16 +230,13 @@
                                 </div>
                                 <div class="form-row mt-3 " id="first-row">
                                     <div class="col-6 parent1">
-                                        <label for="">Kode Produk</label>
+                                        <label for="">Produk: </label>
+                                        <span></span>
                                         <input type="text" class="form-control inputan-produk"
                                             placeholder="Ketik Kode Atau Nama" name='kode[]'>
                                         <ul class="myUL">
 
                                         </ul>
-                                    </div>
-                                    <div class="col-3 parent1">
-                                        <label for="">Nama</label>
-                                        <input type="text" class="form-control nama-produk" placeholder="Nama Produk">
                                     </div>
                                     <div class="col parent1">
                                         <label for="">Jml</label>

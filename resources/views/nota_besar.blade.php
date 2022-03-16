@@ -54,11 +54,11 @@
         .container-wrapper table .address .brand-address {
             margin-top: 0;
 
-            font-size: 8pt;
+            font-size: 10pt;
         }
 
         .container-wrapper table .date-times {
-            font-size: 8pt;
+            font-size: 10pt;
 
             margin-left: 230px;
             width: 200px;
@@ -135,7 +135,7 @@
         <table style="margin-top: 20px; width: 1100px">
             <tr>
                 <td>
-                    <div class="address" style="width:120px">
+                    <div class="address" style="width:150px">
                         <img style="height:25px;" src="{{ public_path('assets/logo.svg') }}" alt="">
                         <p class="brand-address">Jl. Agus Salim D no.10 <br> Telp/Fax 085712423453 / (024) 3554929  <br>
                             Semarang </p>

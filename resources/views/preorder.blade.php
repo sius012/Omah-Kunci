@@ -11,7 +11,7 @@
         * {
             margin: 0px;
 
-            font-size: 10pt;
+            font-size: 12pt;
         }
 
         body{
@@ -38,7 +38,7 @@
         .container-wrapper table .address .brand-address {
             margin-top: 0;
 
-            font-size: 8pt;
+            font-size: 10pt;
         }
 
         .container-wrapper table .date-times {
@@ -103,7 +103,7 @@
         }
         h4{
             
-            font-size: 9pt;
+            font-size: 12pt;
         }
 
     </style>
@@ -111,11 +111,11 @@
 
 <body>
     <div class="container-wrapper">
-        <table style="margin-top: 20px; width: 500px">
+    <table style="margin-top: 20px; width: 1100px">
             <tr>
                 <td style="width:170px">
                     <div class="address">
-                        <img style="height:20px;" src="{{ public_path('assets/logo.svg') }}" alt="">
+                        <img style="height:25px;" src="{{ public_path('assets/logo.svg') }}" alt="">
                         <p class="brand-address">Jl. Agus Salim D no.10 <br> Telp/Fax (024) 3554929 /085712423453 <br> Semarang </p>
                     </div>
                 </td>
@@ -164,8 +164,8 @@
                     @else
                     <td></td>
                     @endif
-                    <td>{{$datas->nama_produk}} {{$datas->nama_merek}} </td>
-                    <td style="width:50px"> {{$datas->jumlah}} {{$datas->satuan}}</td>
+                    <td>{{$datas->nama_kodetype}}  {{$datas->nama_merek}} {{$datas->nama_produk}} </td>
+                    <td valign="top" style="width:50px"> {{$datas->jumlah}} {{$datas->satuan}}</td>
                   
                 </tr>
             @endforeach

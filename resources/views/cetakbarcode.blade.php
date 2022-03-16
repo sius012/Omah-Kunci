@@ -47,7 +47,6 @@ body{
 img{
     width: 30px;
     left: 30px;
-    position: relative;
     transform: rotate(-90);
 }
 </style>
@@ -60,7 +59,7 @@ img{
     <div style="margin-left: 2px; margin-top: 12px;" class="cardi">
     <div style="margin-left: 12px">
     <span style="text-align:left; width:1px;" class="jdl">{{$datas->nama_produk}}</span><br>
-    <span style="">{!! DNS1D::getBarcodeHTML($datas->kode_produk, 'C128',1.35,40) !!}</span><br>
+    <span style="">{!! DNS1D::getBarcodeHTML($datas->kode_produk, 'C128',1.5,40) !!}</span><br>
     <span class="barcode" >{{$datas->kode_produk}}</span>
     <img style="left: 155px ;top: -15   px;" src="{{public_path('assets/ok.png')}}" alt="">
     </div>

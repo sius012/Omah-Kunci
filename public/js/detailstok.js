@@ -27,7 +27,7 @@ $(document).ready(function () {
 
     $(document).on("click", ".sear", function (event) {
         $(event.target).closest(".parent1").children("input").val($(event.target).attr("kode"));
-        $(event.target).closest(".form-row").children(".parent1").children(".nama-produk").val($(event.target).attr("nama"));
+        $(event.target).closest(".parent1").children("span").text($(event.target).attr("nama"));
 
     });
 
@@ -36,6 +36,7 @@ $(document).ready(function () {
     $(".myUL").on("click", ".sear", function (event) {
         $("#produk-select").val($(event.target).attr("kode"));
         $(".myUL").hide();
+        $(event.target).closest(".parent1").children("span").text();
     });
 
 
@@ -52,7 +53,7 @@ $(document).ready(function () {
             
         };
 
-        alert($("#status-select").val());
+        
 
         console.log(data);
         $.ajax({
@@ -65,9 +66,9 @@ $(document).ready(function () {
             url: "/tambahdetailstok",
             type: "post",
             success: function (data) {
-                Swal.fire('Berhasil Ditambahkan', '', 'success');
+                Swal.fire($("#status-select").val()=="masuk" ? 'Berhasil Ditambahkan' : 'Berhasil dikurangi', '', 'success');
                 loaddetail();
-                $("#examplemodal").modal('hide');
+               window.location = '/detailstok';
             },
             error: function (err) {
                 alert(err.responseText);
@@ -198,7 +199,6 @@ $(document).ready(function () {
 
     $("#cetaksubmitter").submit(function (e) {
         e.preventDefault();
-        alert($("#tanggal2").val());
         $.ajax({
             headers: {
                 "X-CSRF-TOKEN": $("meta[name=csrf-token]").attr("content")
@@ -226,6 +226,7 @@ $(document).ready(function () {
 
     $(document).on('keyup', '.inputan-produk', function (e) {
         $(e.target).closest(".parent1").children(".myUL").show();
+    
 
         let kw = $(e.target).val();
 
@@ -253,7 +254,7 @@ $(document).ready(function () {
                     for (var i = 0; i < data['data'].length; i++) {
                         li += `<li>
 
-                                   <a kode="${data['data'][i]['kode_produk']}" nama="${data['data'][i]['nama_produk']}" jumlah="1" potongan="0" class="sear">${data['data'][i]["kode_produk"] + " " + data['data'][i]["nama_produk"] + " " + data['data'][i]['nama_merek']}</a>
+                                   <a kode="${data['data'][i]['kode_produk']}" nama="${data['data'][i]['nama_kodetype']+" " + data['data'][i]['nama_merek']+" " + data['data'][i]['nama_produk']}" jumlah="1" potongan="0" class="sear">${data['data'][i]['nama_kodetype']+" " + data['data'][i]['nama_merek']+" " + data['data'][i]['nama_produk']}</a>
                                 </div>
                             
                             </li>`;
@@ -278,25 +279,19 @@ $(document).ready(function () {
 
     $("#tambahbutton").click(function () {
         $("#first-row").after(`<div class="form-row mt-3">
-        <div class="col-6 parent1">
+        <div class="col-8    parent1">
        
             <input type="text" class="form-control inputan-produk" placeholder="Ketik Kode Atau Nama" name='kode[]'>
             <ul class="myUL">
 
             </ul>
         </div>
-        <div class="col-3 parent1">
-  
-            <input type="text" class="form-control nama-produk" placeholder="Nama Produk">
-        </div>
         <div class="col parent1">
     
             <input type="text" class="form-control" placeholder="Jumlah" name='jumlah[]'>
             
         </div>
-        <div class="col-sm parent" >
-        <button class="btndel btn btn-danger">hapus</button>
-        </div>
+
     </div>`);
     });
 

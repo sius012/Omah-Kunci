@@ -220,7 +220,7 @@ $("#trigger").click(function(e){
                 
                     $("#suratjalan").show();
                 }
-                alert($("#id_trans").val());
+              
                 Swal.fire({
                     title: url == "/bayarpreorder" ? "Pembayaran selesai" : "Transaksi Berhasi Ditambahkan" 
                 });

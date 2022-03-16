@@ -132,7 +132,9 @@ class KasirController extends Controller
             DB::table('detail_transaksi')->where('kode_trans', $id_trans)->where('kode_produk', $data['kode_produk'])->update(['jumlah' => $jumlah + $data['jumlah'], 'potongan' => $ptg]);
         }
         
-        $datadetail = DB::table('detail_transaksi')->join('new_produks','detail_transaksi.kode_produk','=','new_produks.kode_produk')->join('mereks','mereks.id_merek','=','new_produks.id_merek')->where('kode_trans',$id_trans)->get();
+        $datadetail = DB::table('detail_transaksi')->join('new_produks','detail_transaksi.kode_produk','=','new_produks.kode_produk')->join('mereks','mereks.id_merek','=','new_produks.id_merek')
+        ->join('kode_types','kode_types.id_kodetype','=','new_produks.id_ct')
+        ->where('kode_trans',$id_trans)->get();
         }else{
             $getpaket = DB::table("paket")->where("kode_paket",$data['kode_produk'])->get();
             $produk = explode(",",substr($getpaket[0]->kode_produk,0,-1));
@@ -287,7 +289,7 @@ class KasirController extends Controller
 
         $pdf = PDF::loadview('nota.notakecil', ["data" => $data,"data2"=>$data2]);
         if($data[0]->antar == "ya"){
-            $pdf = PDF::loadview('nota.notakecilkirim', ["data" => $data,"data2"=>$data2]);
+            $pdf = PDF::loadview('nota.notakecilkirim', ["data" => $data,"data2"=>$data2])->setPaper('a4', 'landscape');;
         }else{
             
         }
@@ -297,6 +299,7 @@ class KasirController extends Controller
             $pdf->save(storage_path("pdf/$fileName"));
         $storagepath = storage_path("pdf/$fileName");
         $base64 = chunk_split(base64_encode(file_get_contents($storagepath)));
+        unlink(storage_path("pdf/$fileName"));
 
     	return response()->json(["filename" => $base64]);
     }
@@ -321,6 +324,7 @@ class KasirController extends Controller
             $pdf->save(storage_path("pdf/$fileName"));
         $storagepath = storage_path("pdf/$fileName");
         $base64 = chunk_split(base64_encode(file_get_contents($storagepath)));
+        unlink(storage_path("pdf/$fileName"));
 
     	return response()->json(["filename" => $base64]);
     }
@@ -329,13 +333,14 @@ class KasirController extends Controller
 
     public function printpreorder($id){
         $data = DB::table('preorder')->where('id', $id)->get();
-        $data2 = DB::table('preorder_detail')->join("new_produks","new_produks.kode_produk","=","preorder_detail.kode_produk")->join("mereks","mereks.id_merek","=","new_produks.id_merek")->where('id_preorder', $id)->get();
-        $pdf = PDF::loadview('preorder', ["data" => $data[0],"data2"=>$data2]);
+        $data2 = DB::table('preorder_detail')->join("new_produks","new_produks.kode_produk","=","preorder_detail.kode_produk")->join("kode_types","kode_types.id_kodetype","=","new_produks.id_ct")->join("mereks","mereks.id_merek","=","new_produks.id_merek")->where('id_preorder', $id)->get();
+        $pdf = PDF::loadview('preorder', ["data" => $data[0],"data2"=>$data2])->setPaper('a4', 'landscape');;
         $path = public_path('pdf/');
             $fileName =  date('mdy').'-'."PREORDER". '.' . 'pdf' ;
             $pdf->save(storage_path("pdf/$fileName"));
         $storagepath = storage_path("pdf/$fileName");
         $base64 = chunk_split(base64_encode(file_get_contents($storagepath)));
+        unlink(storage_path("pdf/$fileName"));
         return $base64;
     }
     public function tambahpreorder(Request $req){

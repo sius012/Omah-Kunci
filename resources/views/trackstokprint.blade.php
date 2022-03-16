@@ -270,7 +270,7 @@
 
         
         @isset($suplier)
-            <h6>Retur ke Supplier</h6>
+            <h6>Barang Retur ke Supplier</h6>
             <table class="table-data" style="width:180mm !important; margin-top: 5px; margin: 5px;margin-bottom: 10px" >
             <tr>
                         <th >No</th>

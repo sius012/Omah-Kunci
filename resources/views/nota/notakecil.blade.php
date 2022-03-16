@@ -252,7 +252,7 @@ $subtotal = 0;
                         @foreach($data2 as $dats)
                         <tr>
 
-                            <td colspan="2">{{$dats->nama_produk}} {{$dats->nama_merek}}</td>
+                            <td colspan="2">{{$dats->nama_kodetype}} {{$dats->nama_merek}} {{$dats->nama_produk}}</td>
 
 
                         </tr>

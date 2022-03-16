@@ -253,7 +253,7 @@ $haslampau = false;
         </div>
         <div class="form-group">
             <label for="ck"> Unduh Untuk Admin </label>
-            <input id="ck" class="form-control form-control-sm" type="checkbox" name="cua">
+            <input id="ck" class="" type="checkbox" name="cua">
           </div>
       </div>
       <div class="modal-footer">

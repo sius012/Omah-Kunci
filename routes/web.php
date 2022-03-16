@@ -147,7 +147,6 @@ Route::post('/rejecting', 'DSMController@rejecting');
  });
 
 
-Route::get('/check','FakeInject@index');
 
 Route::get('/viewbarcode', function(){
     return view('cetakbarcode');
@@ -166,9 +165,8 @@ Route::get('/viewbarcode', function(){
 
 
 
-Route::get("/cobaexport","ExportProdukController@export");
 
-Route::get("/tipekode","SeederJoyEvo@index");
+
 
 
 //cetak

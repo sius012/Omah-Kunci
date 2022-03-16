@@ -144,12 +144,12 @@ $master='kasir' @endphp
                 $(".readonly").attr('readonly', 'readonly');
             }
             , error: function(err) {
-                alert(err.responseText);
+              
                 Swal.fire("error", "", "info");
             }
         });
 
-        
+
 
     }
 </script>

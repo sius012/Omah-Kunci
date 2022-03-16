@@ -12,8 +12,8 @@ use PDF;
 
 class DetailStokController extends Controller
 {
-    public function loaddatadetailstok(){
-        $datab = DB::table('detail_stok')->join('new_produks', 'new_produks.kode_produk','detail_stok.kode_produk')->join("kode_types","kode_types.id_kodetype","new_produks.id_ct")->join('mereks', 'new_produks.id_merek','mereks.id_merek')->join('users','users.id','=','detail_stok.id_ag')->select('detail_stok.*','new_produks.nama_produk','new_produks.satuan','users.name',"mereks.nama_merek","kode_types.nama_kodetype")->get();
+    public function loaddatadetailstok(Request $req){
+        $datab = DB::table('detail_stok')->join('new_produks', 'new_produks.kode_produk','detail_stok.kode_produk')->join("kode_types","kode_types.id_kodetype","new_produks.id_ct")->join('mereks', 'new_produks.id_merek','mereks.id_merek')->join('users','users.id','=','detail_stok.id_ag')->select('detail_stok.*','new_produks.nama_produk','new_produks.satuan','users.name',"mereks.nama_merek","kode_types.nama_kodetype")->orderBy('created_at','DESC')->get();
         $data = DB::table('detail_stok')->join('new_produks', 'new_produks.kode_produk','detail_stok.kode_produk')->join('mereks', 'new_produks.id_merek','mereks.id_merek')->join('users','users.id','=','detail_stok.id_ag')->select('detail_stok.*','new_produks.nama_produk','new_produks.satuan','users.name')->get();
 
 
@@ -230,7 +230,7 @@ class DetailStokController extends Controller
             $myArr["suplier"] = $retur;
         }
 
-        $myArr['tanggal'] = $req->berdasarkan == 'tanggal' ? date("d M Y",strtotime($req->tanggal))." - ".date("d-M-Y",strtotime($req->tanggal2)) : "Hari Minggu dan Bulan";
+        $myArr['tanggal'] = $req->berdasarkan == 'tanggal' ? date("d M Y",strtotime($req->tanggal))." - ".date("d M Y",strtotime($req->tanggal2)) : "Hari Minggu dan Bulan";
         
         
        
@@ -240,6 +240,7 @@ class DetailStokController extends Controller
         $pdf->save(storage_path("pdf/$fileName"));
         $storagepath = storage_path("pdf/$fileName");
         $base64 = chunk_split(base64_encode(file_get_contents($storagepath)));
+        unlink(storage_path("pdf/$fileName"));
 
     	return json_encode(["filename" => $base64]);
         

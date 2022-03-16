@@ -67,7 +67,9 @@ class PreorderController extends Controller
             DB::table('preorder_detail')->where('id_preorder', $id_trans)->where('kode_produk', $data['kode_produk'])->update(['jumlah' => $jumlah + $data['jumlah']]);
         }
         
-        $datadetail = DB::table('preorder_detail')->join('new_produks','preorder_detail.kode_produk','=','new_produks.kode_produk')->join('mereks','mereks.id_merek','=','new_produks.id_merek')->where('id_preorder',$id_trans)->get();
+        $datadetail = DB::table('preorder_detail')->join('new_produks','preorder_detail.kode_produk','=','new_produks.kode_produk')
+        ->join('kode_types','kode_types.id_kodetype','=','new_produks.id_ct')
+        ->join('mereks','mereks.id_merek','=','new_produks.id_merek')->where('id_preorder',$id_trans)->get();
 
         
         
@@ -277,6 +279,7 @@ class PreorderController extends Controller
         $pdf->save(storage_path("pdf/$fileName"));
         $storagepath = storage_path("pdf/$fileName");
         $base64 = chunk_split(base64_encode(file_get_contents($storagepath)));
+        unlink($storagepath);
 
     	return response()->json(["filename" => $base64]);
     }
@@ -284,12 +287,13 @@ class PreorderController extends Controller
         $id_trans = $req->id_transaksi;
         $data = DB::table("nota_besar")->where('id_transaksi', $id_trans)->get();
         $opsi = DB::table("nb_detail")->join("nota_besar", "nota_besar.id_transaksi", "=", "nb_detail.id_nb")->where("id_nb", $id_trans)->get();
-        $pdf = PDF::loadview('notabesarsj', ["data" => $data[0],"opsi"=>$opsi]);
+        $pdf = PDF::loadview('notabesarsj', ["data" => $data[0],"opsi"=>$opsi])->setPaper('a4', 'landscape');
         $path = public_path('pdf/');
         $fileName =  date('mdy').'-'.$data[0]->id_transaksi. '.' . "suratjalan".'.pdf' ;
         $pdf->save(storage_path("pdf/Surat Jalan Nota Besar/$fileName"));
         $storagepath = storage_path("pdf/Surat Jalan Nota Besar/$fileName");
         $base64 = chunk_split(base64_encode(file_get_contents($storagepath)));
+        unlink($storagepath);
 
     	return response()->json(["filename" => $base64]);
     }
@@ -298,12 +302,13 @@ class PreorderController extends Controller
         $id_trans = $id;
         $data = DB::table("nota_besar")->where('id_transaksi', $id_trans)->get();
         $opsi = DB::table("nb_detail")->join("nota_besar", "nota_besar.id_transaksi", "=", "nb_detail.id_nb")->where("id_nb", $id_trans)->get();
-        $pdf = PDF::loadview('notabesarsj', ["data" => $data[0],"opsi"=>$opsi]);
+        $pdf = PDF::loadview('notabesarsj', ["data" => $data[0],"opsi"=>$opsi])->setPaper('a4', 'landscape');
         $path = public_path('pdf/');
         $fileName =  date('mdy').'-'.$data[0]->id_transaksi. '.' . "suratjalan".'.pdf' ;
         $pdf->save(storage_path("pdf/Surat Jalan Nota Besar/$fileName"));
         $storagepath = storage_path("pdf/Surat Jalan Nota Besar/$fileName");
         $base64 = chunk_split(base64_encode(file_get_contents($storagepath)));
+        unlink($storagepath);
 
     	return $base64;
     }

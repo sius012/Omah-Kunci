@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-
+    
     <style>
         * {
             margin: 0px;
 
-            font-size: 10pt;
-            line-height: 100%;
+            font-size: 12pt;
+            line-height: 120%;
         }
 
         body{
@@ -103,8 +103,8 @@
         }
         h4{
             
-            font-size: 9pt;
-            
+            font-size: 12pt;
+            margin: 0px;
         }
 
 
@@ -113,12 +113,12 @@
 
 <body>
     <div class="container-wrapper">
-        <table style="margin-top: 20px; width: 750px">
+    <table style="margin-top: 20px; width: 1000px">
             <tr>
                 <td>
                     <div class="address" style="width:200px">
                         <img style="height:20px;" src="{{ public_path('assets/logo.svg') }}" alt="">
-                        <p class="brand-address">Jl. Agus Salim D no.10 <br> Telp/Fax (024) 3554929 /085712423453 <br> Semarang </p>
+                        <p class="brand-address">Jl. Agus Salim D no.10 <br> Telp/Fax 085712423453 / (024) 3554929  <br> Semarang </p>
                     </div>
                 </td>
                 <td></td>
@@ -153,7 +153,7 @@
                 <td></td>
             </tr>
             <tr>
-                <td>
+                <td valign="top">
                     <h4>Guna Membayar</h4>
                 </td>
                 <td> {{ $data->gm }}</td>
