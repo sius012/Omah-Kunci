@@ -6,6 +6,7 @@ $haslampau = false;
 @endphp
 @extends('layouts.layout2')
 @section('pagetitle', ' Riwayat Transaksi')
+@section('icon', 'fa fa-history mr-2 ml-2')
 @section('title', 'Riwayat Transaksi')
 
 
@@ -51,10 +52,10 @@ $haslampau = false;
                
                 </div>
                 
-                <button class="btn btn-primary btn-sm ml-2" type="submit">Cari</button>
+                <button class="btn btn-primary btn-sm ml-2" type="submit"><i class="fa fa-search"></i></button>
                 </form>
 
-                <button data-toggle="modal" data-target="#modalRiwayat" class="btn btn-primary"><i class="fa fa-print"></i></button>
+                <button data-toggle="modal" data-target="#modalRiwayat" class="btn btn-primary"><i class="fa fa-print mr-2"></i>Print</button>
 
                 <!--<button data-toggle="modal" data-target="#modaluser" class="btn btn-info"><i class="fa fa-excel; mr-3"></i>Unduh Daftar Pelangan</button>-->
   </div>
@@ -98,7 +99,7 @@ $haslampau = false;
       <div style="width: 130px;" class="">
         @if((Auth::user()->roles[0]['name'] == 'manager' or Auth::user()->roles[0]['name'] == 'kasir') and $datas["status"]!="draf")
         <div class="d-inline">
-          <a id_trans="{{$datas['kode_trans']}}" class="btn btn-warning printing btn-sm m-1 w-25"><i style="" class="fa fa-print"></i></a>
+          <a id_trans="{{$datas['kode_trans']}}" class="btn btn-primary printing btn-sm m-1 w-25"><i style="" class="fa fa-print"></i></a>
           <a style="padding-left: 12px; padding-right: 12px;" id_trans="{{$datas['kode_trans']}}" class="btn btn-primary btn-sm returntrans"><i style="" class="fa fa-info"></i></a>
         </div>
         @elseif($datas['status']=='draf')
@@ -249,16 +250,11 @@ $haslampau = false;
                <label for="">Sampai dengan</label>
                 <input name="sd" class="form-control" id="sd" type="date">
           </div>
-        
         </div>
-        <div class="form-group">
-            <label for="ck"> Unduh Untuk Admin </label>
-            <input id="ck" class="" type="checkbox" name="cua">
-          </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-        <button type="submit" class="btn btn-primary">Unduh</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
       </div>
       </form>
     </div>
