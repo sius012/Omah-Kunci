@@ -104,7 +104,7 @@ $(document).ready(function(e){
 
 
     function bayarcicilan(termin, data){
-        alert(data['kode_transaksi']);
+     
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN' : $("meta[name='csrf-token']").attr('content')
@@ -182,7 +182,7 @@ $(document).ready(function(e){
                     return `
                         <tr ${r['status'] == 'return' ? 'style="background: lightyellow"' : ""}>
                             <td ><input ${r['status'] == 'return' ? 'disabled' : ""} name="kode[]" style="margin-top: -6px;" class="form-control" type="checkbox" value="${r['kode_produk']}"></td>
-                            <td>${r['nama_produk'] + " "}${r['nama_merek']}</</td>
+                            <td>${r['nama_kodetype']} ${r['nama_merek']} ${r['nama_produk'] + " "}</</td>
                             <td>${parseInt(r['harga']).toLocaleString()}</</td>
                             <td>${r['potongan']}</</td>
                             <td>${r['jumlah']}</td>
@@ -219,7 +219,7 @@ $(document).ready(function(e){
         
         let id = $(this).attr('id_trans');
         let nominal = parseInt($("#nominal-bayar").val().replace(/[._]/g, ''));
-        alert(nominal+td);
+      
         if(nominal+td>=total){
             $.ajax({
                 headers: {

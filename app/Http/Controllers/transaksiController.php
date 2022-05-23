@@ -8,6 +8,7 @@ use Excel;
 use App\Exports\PelangganExport;
 use App\Exports\TransaksiExport;
 use function GuzzleHttp\json_encode;
+use App\Http\Controllers\Tools;
 
 class transaksiController extends Controller
 {
@@ -81,7 +82,7 @@ class transaksiController extends Controller
 
     public function tampilreturn(Request $req){
         $id=$req->id_trans;
-        $datatrans = DB::table('transaksi')->join('detail_transaksi','detail_transaksi.kode_trans','=','transaksi.kode_trans')->join('new_produks','detail_transaksi.kode_produk','=','new_produks.kode_produk')->join('mereks','mereks.id_merek','=','new_produks.id_merek')->where('transaksi.kode_trans', $id)->get();
+        $datatrans = DB::table('transaksi')->join('detail_transaksi','detail_transaksi.kode_trans','=','transaksi.kode_trans')->join('new_produks','detail_transaksi.kode_produk','=','new_produks.kode_produk')->join('mereks','mereks.id_merek','=','new_produks.id_merek')->join('kode_types','kode_types.id_kodetype','=','new_produks.id_ct')->where('transaksi.kode_trans', $id)->get();
      
         return json_encode($datatrans);
 
@@ -136,13 +137,12 @@ class transaksiController extends Controller
         $tglstart = $req->md;
         $tglend = $req->sd;
 
-        $has = false;
+        $has = 0;
 
-        if(isset($req->cua)){
-            $has = false;
-        }else{
-            $has = true;
+        if($req->input('cua')){
+            $has = 1;
         }
+
         $datas = DB::table("transaksi")->where("status","!=","draf")->whereBetween(DB::raw('substr(created_at,1,10)'),[$tglstart,$tglend])->get();
 
         $data = [];
@@ -150,17 +150,19 @@ class transaksiController extends Controller
         foreach($datas as $i => $dts){
           
             $quer = DB::table('detail_transaksi')
+                                ->join('transaksi',"transaksi.kode_trans","=","detail_transaksi.kode_trans")
                                 ->join('new_produks', 'detail_transaksi.kode_produk', '=', 'new_produks.kode_produk')
                                 ->join('kode_types','kode_types.id_kodetype','new_produks.id_ct')
                                 ->join('mereks','mereks.id_merek','new_produks.id_merek')
-                                ->where('kode_trans', $dts->kode_trans);
+                                ->where('transaksi.kode_trans', $dts->kode_trans)->where('transaksi.status','!=','return');
             $data[$i] = $quer->get()->toArray();
         
             $data[$i]['jmltrans'] = $quer->count();
             $data[$i]['datas'] = $dts;
+            $data[$i]['potongan'] = $dts->prefix == "rupiah" ? $dts->diskon : $dts->subtotal - Tools::doDisc(1,$dts->subtotal,$dts->diskon,$dts->prefix);
         }
-      // dd($data);
+       
 
-      return Excel::download(new TransaksiExport($data,$has), $has == true ? "Manager" : "Admin Gudang"." - Data Transaksi ".$tglstart." - ".$tglend.".xls");
+      return Excel::download(new TransaksiExport($data,$has),  "Transaksi NK"." - Data Transaksi ".$tglstart." - ".$tglend.".xls");
     }
 }

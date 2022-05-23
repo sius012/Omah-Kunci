@@ -28,6 +28,7 @@ $(document).ready(function(){
 
     $(".tombolcetak2").click(function(e){
         let id = $(this).attr('id_pre');
+        alert(id);
         $.ajax({
             headers: {
                 "X-CSRF-TOKEN" : $("meta[name=csrf-token]").attr('content')
@@ -66,6 +67,7 @@ $(document).ready(function(){
     }
 
     $(".btncetak").click(function(){
-        printpreorder($(this).attr("id_pre"));
+        alert($(this).attr("id_pre"));
+      //  printpreorder($(this).attr("id_pre"));
     });
 });

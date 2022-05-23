@@ -8,16 +8,43 @@
     <title>Document</title>
 
     <style>
+        @font-face {
+
+font-family: tes;
+font-style: normal;
+src: url("{{storage_path('/fonts/Consolas-Font/CONSOLA.ttf')}}");
+}
+
+@font-face {
+
+font-family: tesb;
+font-style: normal;
+src: url("{{storage_path('/fonts/Consolas-Font/CONSOLAB.ttf')}}");
+}
         * {
             margin: 0px;
+            font-family: tes !important;
+            font-size: 10pt;
+            line-height: 70% ;
+        }
+     
 
-            font-size: 12pt;
+        
+        body {
+          
+            
+            
+        }
+        
+        td{
+            height: 0px;
+            padding: 1px;
         }
 
-        body{
-            max-height: 5000px;
+        td h4,h5,th{
+            font-family: tesb !important;
+            font-weight: normal;
         }
-
 
         .container-wrapper {
             margin: 30px;
@@ -33,33 +60,42 @@
         .container-wrapper .header .brand-title {
             margin-bottom: 0;
             text-transform: uppercase;
+            font-family: tesb !important;
+            font-weight: normal;
         }
 
         .container-wrapper table .address .brand-address {
             margin-top: 0;
 
-            font-size: 10pt;
+            font-size: 8pt;
+            line-height: 100%;
         }
 
         .container-wrapper table .date-times {
-            font-size: 8pt;
+            font-size: 10pt;
 
-            margin-left: 320px;
+            margin-left: 230px;
+            width: 200px;
         }
 
         .container-wrapper .big-title {
             text-align: center;
-            margin-bottom: 30px;
+          
+            font-family: tesb !important;
+            font-weight: normal;
         }
 
         .container-wrapper .big-title .title {
-            margin: 0;
-            margin-bottom: -12px;
+              margin-bottom: 3px;
+          
+            font-family: tesb !important;
+            font-weight: normal;
+            font-size: 12pt;
         }
 
         .container-wrapper .big-title .hr {
             margin: 0;
-       
+
             width: 200px;
             display: inline-flex;
             align-items: center;
@@ -97,21 +133,26 @@
             width: 750px;
         }
 
-        #bigtitle{
-            height: 10px;
+        #bigtitle {
+            height: 20px;
 
         }
-        h4{
-            
-            font-size: 12pt;
+
+        h4 {
+
+            font-size: 10pt;
+            margin: 0px;
+            padding: 0px !important;
         }
+
+
 
     </style>
 </head>
 
 <body>
     <div class="container-wrapper">
-    <table style="margin-top: 20px; width: 1100px">
+    <table style="margin-top: 20px; width: 750px">
             <tr>
                 <td style="width:170px">
                     <div class="address">
@@ -119,7 +160,7 @@
                         <p class="brand-address">Jl. Agus Salim D no.10 <br> Telp/Fax (024) 3554929 /085712423453 <br> Semarang </p>
                     </div>
                 </td>
-                <td style="width: 200px"></td>
+                <td style="width: 150px"></td>
                 <td align="center" valign="top" style="width: 0px">
                     <h4 class="date-times">Semarang, {{date('d-M-Y', strtotime($data->created_at))}}
                      
@@ -173,27 +214,7 @@
             <tr><td></td></tr>
         
           
-            <tr align="center" >
-                <td colspan="3" style="padding-top:50px; padding-bottom:30px">
-                    <h4 class="ttd-header">Mengetahui,</h4>
-
-                </td>
-            </tr>
-            <tr>
-                <td align="center">
-                    <div class="wrappers">
-                        <h4 class="customer">Customer,</h4>
-
-                    </div>
-                </td>
-                <td></td>
-                <td align="center" style="padding-left:200px">
-                    <div class="wrappers">
-                        <h4 class="sales">Sales,</h4>
-
-                    </div>
-                </td>
-            </tr>
+           
         </table>
     </div>
 </body>

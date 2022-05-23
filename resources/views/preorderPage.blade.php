@@ -87,12 +87,13 @@ $hastoday = false;
         });
 
         function printpreorder(id_trans){
+     
         $.ajax({
             headers: {
                 "X-CSRF-TOKEN" : $("meta[name=csrf-token]").attr('content')
             },
             data: {
-                id: id_trans,
+                id_pre: id_trans,
             },
             type: 'post',
             dataType: "json",
@@ -107,7 +108,7 @@ $hastoday = false;
     }
 
     $(".btncetak").click(function(){
-        printpreorder($(this).attr("id_pre"));
+     printpreorder($(this).attr("id_pre"));
     });
 
 
@@ -235,7 +236,7 @@ $hastoday = false;
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary btnclose" data-dismiss="modal">Tutup</button>
-        <button id_pre=""id="btncetak" class="btn btn-info btncetak ml-2"><i style="" class="fa fa-print"></i></button>
+        <button id_pre=""id="btncetak" class="btn btn-primary btncetak ml-2"><i style="" class="fa fa-print"></i></button>
       </div>
     </div>
   </div>

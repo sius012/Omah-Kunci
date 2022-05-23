@@ -24,9 +24,8 @@ Auth::routes();
 
 
 
-Route::get('/accountsetting', function(){
-    return view('profile');
-});
+Route::get('/accountsetting', 'AccountSetting@index');
+Route::post('/accountsetting/update', 'AccountSetting@update')->name('accountupdate');
 
 Route::get('/redirecting', 'RedirectController@index');
 
@@ -96,16 +95,16 @@ Route::middleware(["role:admin gudang|manager"])->group(function(){
     Route::get('/detailstok', 'DetailStokController@index');
     Route::post('/loaddatadetailstok', 'DetailStokController@loaddatadetailstok');
     Route::post('/tambahdetailstok', 'DetailStokController@tambahdetailstok');
-    Route::get('/stok', 'StokController@index')->name('stok');
+  
     Route::post('/loaddatastok', 'StokController@loaddatastok');
-    Route::post('/updateallstok', 'StokController@updateallstok');
     Route::post('/printcurrentstok', 'StokController@printcurrent');
-
+    Route::post('/filterdetailstok', 'DetailStokController@loaddatadetailstok');
    
 });
 
 Route::middleware(["role:manager"])->group(function(){
-    
+   
+    Route::get('/detailstok/{kode}/{by}', 'DetailStokController@index')->name("dsc");
     Route::get('/produk', 'ProdukController@index')->name('produk');
     Route::post('/tambahbarang', 'ProdukController@tambahbarang');
     Route::post('/hapusbarang', 'ProdukController@hapusbarang');
@@ -115,7 +114,7 @@ Route::middleware(["role:manager"])->group(function(){
     Route::get('/hapusproduk/{kode}', 'ProdukController@hapusproduk')->name("hapusproduk");
     Route::get('/searchproduct', 'ProdukController@search')->name("searchproduct");
     Route::post('/tambahmerek', 'ProdukController@tambahmerek');
-
+    Route::post('/savebuffer', 'ProdukController@savebuffer');
     Route::post('/getmerekinfo', 'ProdukController@getmerekinfo');
     Route::post('/ubahmerek', 'ProdukController@ubahmerek');
     Route::post('/hapusmerek', 'ProdukController@hapusmerek');
@@ -123,10 +122,10 @@ Route::middleware(["role:manager"])->group(function(){
     Route::get('/editproduk', "ProdukController@showdetail");
     Route::post('/tambahkategori', 'ProdukController@tambahkategori');
     
-Route::get('/dsm', 'DSMController@index');
-Route::post('/loaddsm', 'DSMController@loaddatadetailstok');
-Route::post('/verifiying', 'DSMController@verifiying');
-Route::post('/rejecting', 'DSMController@rejecting');
+    Route::get('/dsm', 'DSMController@index');
+    Route::post('/loaddsm', 'DSMController@loaddatadetailstok');
+    Route::post('/verifiying', 'DSMController@verifiying');
+    Route::post('/rejecting', 'DSMController@rejecting');
     Route::post('/printbarcode', 'ProdukController@printbarcode');
     Route::get('/manajemen_akun', 'AkunController@index')->name('ma');
     Route::post('/updateakun/{id}', 'AkunController@updateakun')->name('updateakun');
@@ -147,39 +146,8 @@ Route::post('/rejecting', 'DSMController@rejecting');
     Route::post('/emailmatch','AkunController@em');
  });
 
-
+  Route::get('/stok', 'StokController@index')->name('stok');
 
 Route::get('/viewbarcode', function(){
     return view('cetakbarcode');
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//cetak
-
-
-
-
-
-
-
-// Theodhore 19 Februari 2022
-
-
-
-

@@ -88,13 +88,16 @@ return array (
     'normal' => $fontDir . '/arial_normal_18feb10f9246effee59daaed581c184d',
   ),
   '' => array(
-    'normal' => $fontDir . '/_normal_18feb10f9246effee59daaed581c184d',
+    'normal' => $fontDir . '/_normal_5b05ed9af6d6d049c20d75cb75391cef',
   ),
   'tes' => array(
-    'normal' => $fontDir . '/tes_normal_18feb10f9246effee59daaed581c184d',
+    'normal' => $fontDir . '/tes_normal_7cccfb8ce5357c60b40f8d5cd707d798',
   ),
   'your custom font name' => array(
     'normal' => $fontDir . '/your_custom_font_name_normal_18feb10f9246effee59daaed581c184d',
+  ),
+  'tesb' => array(
+    'normal' => $fontDir . '/tesb_normal_e27feb6008e060d2d8299e06160a617f',
   ),
 );
 }; ?>

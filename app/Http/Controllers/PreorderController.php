@@ -48,14 +48,12 @@ class PreorderController extends Controller
 
       
        
-        $id_trans = "";
+        $id_trans = $data["id_pre"];
         
-        if($req->session()->has('transaksi')){
-            $id_transaksi = $req->session()->get('transaksi')['id_pre'];
-            $id_trans = $id_transaksi;
+        if($id_trans != "null"){
+       
         }else{
             $id = DB::table('preorder')->insertGetId(['ttd'=>'orang']);
-            $req->session()->put('transaksi', ['id_pre'=>$id]);   
             $id_trans = $id;
         }
     
@@ -112,9 +110,9 @@ class PreorderController extends Controller
                     
 
             
-                            $id = DB::table('nota_besar')->insertGetId(array_merge($req->input('formData'),['no_nota' => $no, 'termin' => 1, "status" => "dibayar",'created_at'=>$tanggal, 'jatuh_tempo'=>$tanggal2,]));
-                            $id2 = DB::table('nota_besar')->insertGetId(['ttd'=> $formdata["ttd"],'ttd'=> $formdata["ttd"],'up'=> $formdata["up"],'gm'=> $formdata["gm"],'total'=> $formdata["total"],'no_nota' => $no, 'termin' => 2, "status" => "ready",'jatuh_tempo'=>$tanggal2]);
-                            $id3 = DB::table('nota_besar')->insertGetId(['ttd'=> $formdata["ttd"],'ttd'=> $formdata["ttd"],'up'=> $formdata["up"],'gm'=> $formdata["gm"],'total'=> $formdata["total"],'no_nota' => $no, 'termin' => 3,'jatuh_tempo'=>$tanggal2]);
+            $id = DB::table('nota_besar')->insertGetId(array_merge($req->input('formData'),['no_nota' => $no, 'termin' => 1, "status" => "dibayar",'created_at'=>$tanggal, 'jatuh_tempo'=>$tanggal2,]));
+            $id2 = DB::table('nota_besar')->insertGetId(['ttd'=> $formdata["ttd"],'up'=> $formdata["up"],'gm'=> $formdata["gm"],'total'=> $formdata["total"],'no_nota' => $no, 'termin' => 2, "status" => "ready",'jatuh_tempo'=>$tanggal2]);
+            $id3 = DB::table('nota_besar')->insertGetId(['ttd'=> $formdata["ttd"],'up'=> $formdata["up"],'gm'=> $formdata["gm"],'total'=> $formdata["total"],'no_nota' => $no, 'termin' => 3,'jatuh_tempo'=>$tanggal2]);
              
             
           
@@ -199,7 +197,7 @@ class PreorderController extends Controller
 
 
 
-        DB::table("nota_besar")->where("no_nota", $no_nota)->where("termin",$termin)->update(["status" => "dibayar"]);
+        DB::table("nota_besar")->where("no_nota", $no_nota)->where("termin",$termin)->update(["status" => "dibayar",'created_at'=>$req->tanggal]);
      if($termin != 3){
         DB::table("nota_besar")->where("no_nota", $no_nota)->where("termin",$termin+1)->update(["status" => "menunggu"]);
      }  
@@ -273,7 +271,7 @@ class PreorderController extends Controller
         $opsi = DB::table("nb_detail")->join("nota_besar", "nota_besar.id_transaksi", "=", "nb_detail.id_nb")->where("id_nb", $id_trans)->get();
         
         $pdf = PDF::loadview('nota_besar', ["data" => $data[0],"opsi"=>$opsi, "td" => $td < 1 ? 0 : $td = DB::table("nota_besar")->where('no_nota',$data[0]->no_nota)->where("termin","<",$data[0]->termin)->sum("us")])
-        ->setPaper('a4', 'landscape');
+        ;
         $path = public_path('pdf/');
         $fileName =  date('mdy').'-'.$data[0]->id_transaksi. '.' . "nota_besar".'pdf' ;
         $pdf->save(storage_path("pdf/$fileName"));
@@ -287,7 +285,7 @@ class PreorderController extends Controller
         $id_trans = $req->id_transaksi;
         $data = DB::table("nota_besar")->where('id_transaksi', $id_trans)->get();
         $opsi = DB::table("nb_detail")->join("nota_besar", "nota_besar.id_transaksi", "=", "nb_detail.id_nb")->where("id_nb", $id_trans)->get();
-        $pdf = PDF::loadview('notabesarsj', ["data" => $data[0],"opsi"=>$opsi])->setPaper('a4', 'landscape');
+        $pdf = PDF::loadview('notabesarsj', ["data" => $data[0],"opsi"=>$opsi]);
         $path = public_path('pdf/');
         $fileName =  date('mdy').'-'.$data[0]->id_transaksi. '.' . "suratjalan".'.pdf' ;
         $pdf->save(storage_path("pdf/Surat Jalan Nota Besar/$fileName"));
@@ -302,7 +300,7 @@ class PreorderController extends Controller
         $id_trans = $id;
         $data = DB::table("nota_besar")->where('id_transaksi', $id_trans)->get();
         $opsi = DB::table("nb_detail")->join("nota_besar", "nota_besar.id_transaksi", "=", "nb_detail.id_nb")->where("id_nb", $id_trans)->get();
-        $pdf = PDF::loadview('notabesarsj', ["data" => $data[0],"opsi"=>$opsi])->setPaper('a4', 'landscape');
+        $pdf = PDF::loadview('notabesarsj', ["data" => $data[0],"opsi"=>$opsi]);
         $path = public_path('pdf/');
         $fileName =  date('mdy').'-'.$data[0]->id_transaksi. '.' . "suratjalan".'.pdf' ;
         $pdf->save(storage_path("pdf/Surat Jalan Nota Besar/$fileName"));

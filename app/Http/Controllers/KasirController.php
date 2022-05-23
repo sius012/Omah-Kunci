@@ -44,30 +44,30 @@ class KasirController extends Controller
 
     public function loader(Request $req){
         if($req->jenis == "normal"){
-        if($req->session()->has('transaksi')){
+        if($req->id_trans != null){
         
-           $data = DB::table('detail_transaksi')->join('new_produks', 'detail_transaksi.kode_produk', '=', 'new_produks.kode_produk')->join('kode_types','kode_types.id_kodetype','new_produks.id_ct')->join('mereks','mereks.id_merek','new_produks.id_merek')->where('kode_trans', $req->session()->get('transaksi')['id_transaksi'])->get();
+           $data = DB::table('detail_transaksi')->join('new_produks', 'detail_transaksi.kode_produk', '=', 'new_produks.kode_produk')->join('mereks','mereks.id_merek','new_produks.id_merek')->join('kode_types','kode_types.id_kodetype','new_produks.id_ct')->where('kode_trans', $req->id_trans)->get();
                 return(json_encode(["datadetail" => $data]));
             
         }
         }else{
-            if($req->session()->has('transaksi')){
-                if($req->jenis)
-                $data = DB::table('preorder_detail')->join('new_produks', 'preorder_detail.kode_produk', '=', 'new_produks.kode_produk')->join('kode_types','kode_types.id_kodetype','new_produks.id_ct')->join('mereks','mereks.id_merek','new_produks.id_merek')->where('id_preorder', $req->session()->get('transaksi')['id_pre'])->get();
+            
+            
+                $data = DB::table('preorder_detail')->join('new_produks', 'preorder_detail.kode_produk', '=', 'new_produks.kode_produk')->join('mereks','mereks.id_merek','new_produks.id_merek')->join('kode_types','kode_types.id_kodetype','new_produks.id_ct')->where('id_preorder', $req->id_pre)->get();
                      return(json_encode(["datadetail" => $data]));
                  
-             }
+             
         }
     }
 
     public function cari(Request $req){
         $kw = $req->input('data');
-        $data = DB::table('new_produks')->join("tipes","tipes.id_tipe","=","new_produks.id_tipe")->join("kode_types","kode_types.id_kodetype","=","new_produks.id_ct")->join("mereks","mereks.id_merek","=","new_produks.id_merek")->where('nama_produk',"LIKE","%".$kw."%")->orWhere('kode_produk',"LIKE","%".$kw."%")->where("kode_produk","!=","")->take(10)->get();
-        $data2 = DB::table('paket')->where("kode_paket","LIKE","%".$kw."%")->orWhere("nama_paket","LIKE","%".$kw."%")->take(10)->get();
+        $data = DB::table('new_produks')->join("tipes","tipes.id_tipe","=","new_produks.id_tipe")->join("kode_types","kode_types.id_kodetype","=","new_produks.id_ct")->join("mereks","mereks.id_merek","=","new_produks.id_merek")->where('nama_produk',"LIKE","%".$kw."%")->orWhere('kode_produk',"LIKE","%".$kw."%")->orWhere('tipes.nama_tipe','LIKE','%'.$kw."%")->orWhere('kode_types.nama_kodetype','LIKE','%'.$kw."%")->orWhere('mereks.nama_merek','LIKE','%'.$kw."%")->where("kode_produk","!=","")->take(50)->get();
+        $data2 = DB::table('paket')->where("kode_paket","LIKE","%".$kw."%")->orWhere("nama_paket","LIKE","%".$kw."%")->take(50)->get();
         $count = DB::table('new_produks')->where('kode_produk',$kw)->count();
        
         if($count == 1){
-             $data2 = DB::table('new_produks')->join("tipes","tipes.id_tipe","=","new_produks.id_tipe")->join("kode_types","kode_types.id_kodetype","=","new_produks.id_ct")->join("mereks","mereks.id_merek","=","new_produks.id_merek")->where("kode_produk",$kw)->orWhere("nama_paket","LIKE","%".$kw."%")->get();
+             $data2 = DB::table('new_produks')->join("tipes","tipes.id_tipe","=","new_produks.id_tipe")->join("kode_types","kode_types.id_kodetype","=","new_produks.id_ct")->join("mereks","mereks.id_merek","=","new_produks.id_merek")->where("kode_produk",$kw)->get();
              return json_encode(['data' => $data, 'currentproduk' => (array) $data2[0]]);
         }else{
             return( json_encode(['data' => $data,"data2"=>$data2]));
@@ -94,7 +94,7 @@ class KasirController extends Controller
     }
     public function tambahTransaksiDetail(Request $req){
         $data = $req->input('data');
-        $id_trans = "";
+        $id_trans = $data['id_trans'];
       
         $id_kasir = Auth::user()->id;   
 
@@ -106,20 +106,19 @@ class KasirController extends Controller
             return json_encode(['datadetail'=>'barang habis','as'=>$stock]);
         }
         
-      
+        
         $harga = DB::table('new_produks')->where('kode_produk',$data['kode_produk'])->pluck("harga")->first();
         $disc = DB::table('new_produks')->where('kode_produk',$data['kode_produk'])->pluck("diskon")->first();
         $prefix = DB::table('new_produks')->where('kode_produk',$data['kode_produk'])->pluck("diskon_tipe")->first();
         
         
-        if($req->session()->has('transaksi')){
-            $id_transaksi = $req->session()->get('transaksi')['id_transaksi'];
-            $id_trans = $id_transaksi;
+        if($id_trans != "null"){
+            
+  
         }else{
            
-            $id = DB::table('transaksi')->insertGetId(['id_kasir' =>$id_kasir]);
-            $req->session()->put('transaksi', ['id_transaksi' => $id]);   
-            $id_trans = $id;
+            $idt = DB::table('transaksi')->insertGetId(['id_kasir' =>$id_kasir]);
+            $id_trans = $idt;
         }
     
         $counter = DB::table('detail_transaksi')->where('kode_trans', $id_trans)->where('kode_produk', $data['kode_produk'])->count();
@@ -132,32 +131,23 @@ class KasirController extends Controller
             DB::table('detail_transaksi')->where('kode_trans', $id_trans)->where('kode_produk', $data['kode_produk'])->update(['jumlah' => $jumlah + $data['jumlah'], 'potongan' => $ptg]);
         }
         
-        $datadetail = DB::table('detail_transaksi')->join('new_produks','detail_transaksi.kode_produk','=','new_produks.kode_produk')->join('mereks','mereks.id_merek','=','new_produks.id_merek')
-        ->join('kode_types','kode_types.id_kodetype','=','new_produks.id_ct')
-        ->where('kode_trans',$id_trans)->get();
+        $datadetail = DB::table('detail_transaksi')->join('new_produks','detail_transaksi.kode_produk','=','new_produks.kode_produk')->join('mereks','mereks.id_merek','=','new_produks.id_merek')->where('kode_trans',$id_trans)->get();
         }else{
             $getpaket = DB::table("paket")->where("kode_paket",$data['kode_produk'])->get();
             $produk = explode(",",substr($getpaket[0]->kode_produk,0,-1));
             $jumlah = explode(",",substr($getpaket[0]->jumlah,0,-1));
             $harga = explode(",",substr($getpaket[0]->harga,0,-1));
 
-            if($req->session()->has('transaksi')){
-                $id_transaksi = $req->session()->get('transaksi')['id_transaksi'];
-                $id_trans = $id_transaksi;
+            if($id_trans != "null"){
+
             }else{
                 $no = DB::table('transaksi')->whereDate('transaksi.created_at', Carbon::today())->count();
                 $no += 1;   
-                $id = DB::table('transaksi')->insertGetId(['no_nota' => date("ymd").str_pad($no+1, 3, '0', STR_PAD_LEFT), 'id_kasir' =>$id_kasir]);
-                $req->session()->put('transaksi', ['id_transaksi' => $id, 'no_nota' => $no]);   
+                $id = DB::table('transaksi')->insertGetId(['no_nota' => date("ymd").str_pad($no+1, 3, '0', STR_PAD_LEFT), 'id_kasir' =>$id_kasir]); 
                 $id_trans = $id;
             }
 
             foreach($produk as $i => $produks){
-                $stock2 = DB::table('stok')->where('kode_produk',$produks)->sum('jumlah');
-                $hasilpengurangan2 = $stock2 - $jumlah[$i];
-                if($hasilpengurangan2 < 0){
-                    return json_encode(['datadetail'=>'barang habis','as'=>$stock2]);
-                }
                 $hargas = $harga[$i]/$jumlah[$i];
                 $jumlahs = $jumlah[$i];
                 
@@ -165,7 +155,7 @@ class KasirController extends Controller
             }
         }
 
-        $datadetail = DB::table("detail_transaksi")->join("new_produks","detail_transaksi.kode_produk","=","new_produks.kode_produk")->join('kode_types',"kode_types.id_kodetype","new_produks.id_ct")->join("mereks","mereks.id_merek","=","new_produks.id_merek")->where("kode_trans",$id_trans)->get();
+        $datadetail = DB::table("detail_transaksi")->join("new_produks","detail_transaksi.kode_produk","=","new_produks.kode_produk")->join("mereks","mereks.id_merek","=","new_produks.id_merek")->join("kode_types","kode_types.id_kodetype","=","new_produks.id_ct")->where("kode_trans",$id_trans)->get();
         
         
        
@@ -177,7 +167,7 @@ class KasirController extends Controller
         $telp = $data['telp'];
         $alamat = $data['alamat'];
         $subtotal = 0;
-        $id_transaksi = $req->session()->get('transaksi')['id_transaksi'];
+        $id_transaksi = $data['id_trans'];
         $diantar = $data['antarkah'];
         $metode = $data['via'];
         $no = DB::table('transaksi')->where("status","!=","draf")->whereDate('transaksi.created_at', Carbon::today())->count();
@@ -193,7 +183,7 @@ class KasirController extends Controller
             $subtotal += Tools::doDisc($stoks->jumlah,$stoks->harga_produk,$stoks->potongan,$stoks->prefix);
         }
 
-        $afterdiskon = $subtotal - $data['diskon']; 
+        $afterdiskon = Tools::doDisc(1,$subtotal,$data['diskon'],$data['prefix']); 
         $status = $data["bayar"] - $afterdiskon >= 0 ? "lunas":"belum lunas";
        
 
@@ -202,10 +192,10 @@ class KasirController extends Controller
             DB::table("stok")->where('kode_produk', $produks->kode_produk)->update(["jumlah" => (int) $currentstok - (int) $produks->jumlah]);
         }
 
-
         
 
-        DB::table('transaksi')->where('kode_trans', $id_transaksi)->update(["nama_pelanggan" => $data['nama_pelanggan'],'telepon' => $telp,'alamat'=>$alamat,"subtotal" => $subtotal, "status" => $status, "diskon" => $data["diskon"],"metode" => $data['via'],"bayar" => $data["bayar"],"antar"=>$diantar]);
+        DB::table('transaksi')->where('kode_trans', $id_transaksi)->update(["nama_pelanggan" => $data['nama_pelanggan'],'telepon' => $telp,'alamat'=>$alamat,"subtotal" => $subtotal, "status" => $status,'prefix'=>$data['prefix'], "diskon" => $data["diskon"],"metode" => $data['via'],"bayar" => $data["bayar"],"antar"=>$diantar, $no_nota=$no_nota]);
+        DB::table('detail_transaksi')->where('kode_trans', $id_transaksi)->update(['status'=>'terjual']);
 
         
 
@@ -217,14 +207,14 @@ class KasirController extends Controller
         $telp = $data['telp'];
         $alamat = $data['alamat'];
         $subtotal = 0;
-        $id_transaksi = $req->session()->get('transaksi')['id_pre'];
+        $id_transaksi = $data['id_pre'];
         $counter = DB::table("preorder")->where("status","!=","draft")->whereDate('preorder.created_at', Carbon::today())->count();
         $no_nota = date("ymd").str_pad($counter+1,3,0,STR_PAD_LEFT);
 
 
         
 
-        DB::table('preorder')->where('id', $id_transaksi)->update(["status"=>"selesai","no_nota" => $no_nota,"ttd" => $data['nama_pelanggan'],'telepon' => $telp,"us" => $data["bayar"]]);
+        DB::table('preorder')->where('id', $id_transaksi)->update(["status"=>"selesai","no_nota" => "","ttd" => $data['nama_pelanggan'],'telepon' => $telp,"us" => $data["bayar"]]);
 
         
 
@@ -251,11 +241,12 @@ class KasirController extends Controller
 
     public function removedetail(Request $req){
         if($req->jenis == "normal"){
-            $id_trans = $req->session()->get('transaksi')['id_transaksi'];
+           
             $id_detail = $req->input('id_detail');
+             $id_trans = $req->id_trans;
             DB::table("detail_transaksi")->where("id",$id_detail)->delete();
-            $req->session()->forget('datadetail');
-            $datadetail = DB::table('detail_transaksi')->join('new_produks','detail_transaksi.kode_produk','=','new_produks.kode_produk')->join('mereks','mereks.id_merek','=','new_produks.id_merek')->join('kode_types','kode_types.id_kodetype','=','new_produks.id_ct')->where('kode_trans',$id_trans)->get();
+            
+            $datadetail = DB::table('detail_transaksi')->join('new_produks','detail_transaksi.kode_produk','=','new_produks.kode_produk')->join('mereks','mereks.id_merek','=','new_produks.id_merek')->where('kode_trans',$id_trans)->get();
 
             $subtotal = 0;
             foreach($datadetail as $ds){
@@ -264,10 +255,9 @@ class KasirController extends Controller
 
             DB::table("transaksi")->where("kode_trans", $id_trans)->update(['subtotal' => $subtotal]);
             
-            $req->session()->put('datadetail', $datadetail); 
             return(json_encode($datadetail));
         }else{
-            $id_trans = $req->session()->get('transaksi')['id_pre'];
+            $id_trans = $req->id_pre;
             $id_detail = $req->input('id_detail');
             DB::table("preorder_detail")->where("id",$id_detail)->delete();
             $req->session()->forget('datadetail');
@@ -283,13 +273,13 @@ class KasirController extends Controller
 
 
     public function cetaknotakecil(Request $req){
-        $id = $req->session()->get('transaksi')['id_transaksi'];
+        $id = $req->id_trans;
         $data = DB::table('transaksi')->join('users', 'users.id', '=', 'transaksi.id_kasir')->where('kode_trans',$id)->get();
         $data2 = DB::table('detail_transaksi')->join('new_produks', 'new_produks.kode_produk','=','detail_transaksi.kode_produk')->join("mereks","mereks.id_merek","=","new_produks.id_merek")->join("kode_types","kode_types.id_kodetype","=","new_produks.id_ct")->where('kode_trans',$id)->get();
 
         $pdf = PDF::loadview('nota.notakecil', ["data" => $data,"data2"=>$data2]);
         if($data[0]->antar == "ya"){
-            $pdf = PDF::loadview('nota.notakecilkirim', ["data" => $data,"data2"=>$data2])->setPaper('a4', 'landscape');;
+            $pdf = PDF::loadview('nota.notakecilkirim', ["data" => $data,"data2"=>$data2]);
         }else{
             
         }
@@ -299,16 +289,15 @@ class KasirController extends Controller
             $pdf->save(storage_path("pdf/$fileName"));
         $storagepath = storage_path("pdf/$fileName");
         $base64 = chunk_split(base64_encode(file_get_contents($storagepath)));
-        unlink(storage_path("pdf/$fileName"));
 
-    	return response()->json(["filename" => $base64]);
+        return response()->json(["filename" => $base64]);
     }
 
     public function printnotakecil(Request $req){
         $id = $req->id;
         $data = DB::table('transaksi')->join('users', 'users.id', '=', 'transaksi.id_kasir')->where('kode_trans',$id)->get();
        
-        $data2 = DB::table('detail_transaksi')->join('new_produks', 'new_produks.kode_produk','=','detail_transaksi.kode_produk')->join("mereks","mereks.id_merek","=","new_produks.id_merek")->where('kode_trans',$id)->get();
+        $data2 = DB::table('detail_transaksi')->join('new_produks', 'new_produks.kode_produk','=','detail_transaksi.kode_produk')->join("mereks","mereks.id_merek","=","new_produks.id_merek")->join("kode_types","kode_types.id_kodetype","=","new_produks.id_ct")->where('kode_trans',$id)->get();
     
        
         
@@ -324,23 +313,21 @@ class KasirController extends Controller
             $pdf->save(storage_path("pdf/$fileName"));
         $storagepath = storage_path("pdf/$fileName");
         $base64 = chunk_split(base64_encode(file_get_contents($storagepath)));
-        unlink(storage_path("pdf/$fileName"));
 
-    	return response()->json(["filename" => $base64]);
+        return response()->json(["filename" => $base64]);
     }
 
 
 
     public function printpreorder($id){
         $data = DB::table('preorder')->where('id', $id)->get();
-        $data2 = DB::table('preorder_detail')->join("new_produks","new_produks.kode_produk","=","preorder_detail.kode_produk")->join("kode_types","kode_types.id_kodetype","=","new_produks.id_ct")->join("mereks","mereks.id_merek","=","new_produks.id_merek")->where('id_preorder', $id)->get();
-        $pdf = PDF::loadview('preorder', ["data" => $data[0],"data2"=>$data2])->setPaper('a4', 'landscape');;
+        $data2 = DB::table('preorder_detail')->join("new_produks","new_produks.kode_produk","=","preorder_detail.kode_produk")->join("mereks","mereks.id_merek","=","new_produks.id_merek")->join("kode_types","kode_types.id_kodetype","=","new_produks.id_ct")->where('id_preorder', $id)->get();
+        $pdf = PDF::loadview('preorder', ["data" => $data[0],"data2"=>$data2]);
         $path = public_path('pdf/');
             $fileName =  date('mdy').'-'."PREORDER". '.' . 'pdf' ;
             $pdf->save(storage_path("pdf/$fileName"));
         $storagepath = storage_path("pdf/$fileName");
         $base64 = chunk_split(base64_encode(file_get_contents($storagepath)));
-        unlink(storage_path("pdf/$fileName"));
         return $base64;
     }
     public function tambahpreorder(Request $req){
@@ -358,7 +345,7 @@ class KasirController extends Controller
     }
 
     public function cetakpreorder(Request $req){
-        $id= $req->id;
+        $id= $req->id_pre;
         $printku = $this->printpreorder($id);
 
         return json_encode(['filename'=>$printku]);
